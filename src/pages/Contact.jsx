@@ -11,39 +11,17 @@ export default function Contact({ id, className = "" }) {
     AOS.init({ duration: 800, once: false });
   }, []);
 
-  // Scroll into view + lift animation
-  useEffect(() => {
-    if (id) {
-      const element = document.getElementById(id);
-      if (element) {
-        const yOffset = -200; // adjust for sticky navbar
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
-
-        // Lift animation
-        element.style.transition = "transform 0.4s ease-out, opacity 0.4s ease-out";
-        element.style.transform = "translateY(-10px)";
-        element.style.opacity = "0.7";
-
-        setTimeout(() => {
-          element.style.transform = "translateY(0)";
-          element.style.opacity = "1";
-        }, 400);
-      }
-    }
-  }, [id]);
-
   return (
-    <div id={id} className={`${className} min-h-screen px-6 md:px-10 font-poppins-med text-white`}>
+    <div id={id} className={`${className} min-h-screen px-6 md:px-10 font-poppins-med text-white py-20`}>
       {/* Header */}
       <h1 className="text-4xl md:text-5xl text-center mb-4" data-aos="fade-down">
         Contact Me
       </h1>
-      <p className="text-gray-300 text-center mb-8 md:text-lg" data-aos="fade-down" data-aos-delay="100">
+      <p className="text-gray-300 text-center mb-10 md:text-lg" data-aos="fade-down" data-aos-delay="100">
         Reach out to me via form, social media, or support platforms
       </p>
 
-      {/* Buttons */}
+      {/* Tabs */}
       <div className="flex justify-center gap-6 mb-10 flex-wrap" data-aos="fade-up">
         <button
           className={`flex items-center gap-2 px-6 py-3 rounded-full text-[18px] transition ${
@@ -66,7 +44,7 @@ export default function Contact({ id, className = "" }) {
       {/* Content */}
       {activeTab === "contact" && (
         <div className="flex flex-col md:flex-row gap-10" data-aos="fade-up" data-aos-delay="200">
-          {/* Left - Social Media */}
+          {/* Social Links */}
           <div className="flex flex-col items-center md:items-start gap-4 md:w-1/4 px-10">
             <h2 className="text-xl font-semibold mb-2">Social Links</h2>
             <div className="flex flex-col gap-3 text-xl">
@@ -85,7 +63,7 @@ export default function Contact({ id, className = "" }) {
             </div>
           </div>
 
-          {/* Right - Form */}
+          {/* Form */}
           <form className="flex-1 flex flex-col gap-4 bg-gray-800/40 backdrop-blur-md p-6 rounded-2xl shadow-lg">
             <input type="text" placeholder="Your Name" className="p-3 rounded-md bg-gray-700 text-white focus:outline-none" />
             <input type="email" placeholder="Your Email" className="p-3 rounded-md bg-gray-700 text-white focus:outline-none" />

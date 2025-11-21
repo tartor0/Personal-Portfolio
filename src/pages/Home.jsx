@@ -28,8 +28,12 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [index]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
   return (
-    <div className="h-[500vh] relative bg-linear-to-br from-black from-30% to-orange-500 overflow-hidden">
+    <div id="home" className=" relative bg-linear-to-br from-black from-30% to-orange-500 overflow-hidden">
       {/* SVG Decorations */}
       <motion.img
         src={thunderbolt}
@@ -129,10 +133,10 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
+ <About id="about" className="scroll-mt-24" />
+ <Skills id="skills" className="scroll-mt-24" />
+ <Contact id="contact" className="scroll-mt-24" />
 
-      <About id="about" className="scroll-mt-24" />
-      <Skills id="skills" className="scroll-mt-24" />
-      <Contact id="contact" className="scroll-mt-24" />
     </div>
   );
 }

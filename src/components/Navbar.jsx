@@ -7,21 +7,23 @@ export default function Navbar() {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -96;
+      const yOffset = -96; // adjust for navbar height
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
-    setOpen(false);
+    setOpen(false); // close mobile menu on click
   };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-md text-white py-4 px-5 md:px-10 font-poppins-med shadow-lg">
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <h1 className="text-[30px]">Tartor</h1>
+        <h1 className="text-[30px] cursor-pointer" onClick={() => scrollToSection("home")}>
+          Tartor
+        </h1>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-9 md:gap-3 lg:gap-40">
+        <div className="hidden md:flex items-center gap-9 lg:gap-40">
           <div className="flex gap-5 md:gap-8 items-center border-2 border-gray-400 py-3 px-5 rounded-full text-gray-300">
             <button onClick={() => scrollToSection("home")} className="hover:text-orange-500">Home</button>
             <button onClick={() => scrollToSection("about")} className="hover:text-orange-500">About</button>
@@ -53,7 +55,7 @@ export default function Navbar() {
           <button onClick={() => scrollToSection("home")} className="hover:text-orange-500">Home</button>
           <button onClick={() => scrollToSection("about")} className="hover:text-orange-500">About</button>
           <button onClick={() => scrollToSection("skills")} className="hover:text-orange-500">Skills</button>
-          <button onClick={() => scrollToSection("experience")} className="hover:text-orange-500">Experience</button>
+          <button onClick={() => scrollToSection("experience")} className="hover:text-orange-500">Projects</button>
           <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
 
           <button className="mt-3 flex items-center gap-2 border border-gray-400 rounded-full px-4 py-2 w-fit">
