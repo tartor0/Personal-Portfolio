@@ -1,16 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaUser,
   FaLightbulb,
   FaIdBadge,
-  FaBirthdayCake,
   FaMapMarkerAlt,
-  FaEnvelope,
-  FaPhone,
   FaGraduationCap,
-  FaStar,
+  FaEnvelope,
 } from "react-icons/fa";
-import PersonalImage from "../assets/personal-image.webp"; // replace with your image
+import PersonalImage from "../assets/personal-image.avif"; // replace with your image
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -19,14 +16,25 @@ export default function About({ id, className = "" }) {
     AOS.init({ duration: 800, once: false });
   }, []);
 
+  const [copied, setCopied] = useState(false);
+  const email = "gaaditartor160@gmail.com";
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(email).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // reset after 2 seconds
+    });
+  };
+
   const personalInfo = [
     { icon: FaUser, label: "Name", value: "Tartor Gaadi" },
-    { icon: FaBirthdayCake, label: "Date of Birth", value: "09/02/2010" },
     { icon: FaMapMarkerAlt, label: "Location", value: "Lagos, Nigeria" },
-    { icon: FaEnvelope, label: "Email", value: "tartor@example.com" },
-    { icon: FaPhone, label: "Phone", value: "+234 123 456 789" },
     { icon: FaGraduationCap, label: "Education", value: "B.Sc Computer Science" },
-    { icon: FaStar, label: "GPA", value: "Pending" },
+    {
+      icon: FaEnvelope,
+      label: "Email",
+      isEmail: true, // flag to render button only
+    },
   ];
 
   return (
@@ -69,21 +77,31 @@ export default function About({ id, className = "" }) {
           </div>
 
           {/* Personal Information Grid */}
-          <div className="bg-gray-900/40 backdrop-blur-md rounded-2xl p-10 shadow-lg" data-aos="fade-up" data-aos-delay="200">
+          <div className="bg-gray-800 backdrop-blur-md rounded-2xl p-10 shadow-xl" data-aos="fade-up" data-aos-delay="200">
             <h1 className="flex items-center gap-3 text-2xl md:text-3xl font-semibold mb-6">
-              <FaIdBadge className="text-orange-800 w-8 h-8" /> Personal Information
+              <FaIdBadge className="text-gray-600 w-8 h-8" /> Personal Information
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
               {personalInfo.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-3 bg-gray-800/40 rounded-xl"
+                  className="flex items-center justify-center gap-3 p-3 bg-gray-800/40 rounded-xl"
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
                   <item.icon className="text-gray-600 w-6 h-6" />
-                  <span>{item.label}: {item.value}</span>
+                  
+                  {item.isEmail ? (
+                    <button
+                      onClick={handleCopyEmail}
+                      className="px-4 py-2 bg-gray-600 hover:bg-gray-500 hover:cursor-pointer rounded-md text-white font-semibold transition text-sm md:text-base"
+                    >
+                      {copied ? "Email Address Copied!" : "Copy Email Address"}
+                    </button>
+                  ) : (
+                    <span>{item.label}: {item.value}</span>
+                  )}
                 </div>
               ))}
             </div>

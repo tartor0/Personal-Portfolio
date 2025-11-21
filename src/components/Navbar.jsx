@@ -15,7 +15,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-md text-white py-4 px-5 md:px-10 font-poppins-med shadow-lg">
+    <nav className="fixed top-0 w-full z-50 bg-gray-800/40 backdrop-blur-md text-white py-4 px-5 md:px-10 font-poppins-med shadow-lg">
       <div className="flex justify-between items-center">
         {/* Logo */}
         <h1 className="text-[30px] cursor-pointer" onClick={() => scrollToSection("home")}>
@@ -28,7 +28,7 @@ export default function Navbar() {
             <button onClick={() => scrollToSection("home")} className="hover:text-orange-500">Home</button>
             <button onClick={() => scrollToSection("about")} className="hover:text-orange-500">About</button>
             <button onClick={() => scrollToSection("skills")} className="hover:text-orange-500">Skills</button>
-            <button onClick={() => scrollToSection("experience")} className="hover:text-orange-500">Projects</button>
+            <button onClick={() => scrollToSection("projects")} className="hover:text-orange-500">Projects</button>
             <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
           </div>
 
@@ -55,7 +55,7 @@ export default function Navbar() {
           <button onClick={() => scrollToSection("home")} className="hover:text-orange-500">Home</button>
           <button onClick={() => scrollToSection("about")} className="hover:text-orange-500">About</button>
           <button onClick={() => scrollToSection("skills")} className="hover:text-orange-500">Skills</button>
-          <button onClick={() => scrollToSection("experience")} className="hover:text-orange-500">Projects</button>
+          <button onClick={() => scrollToSection("projects")} className="hover:text-orange-500">Projects</button>
           <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
 
           <button className="mt-3 flex items-center gap-2 border border-gray-400 rounded-full px-4 py-2 w-fit">

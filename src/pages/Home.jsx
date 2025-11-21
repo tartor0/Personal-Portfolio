@@ -1,14 +1,19 @@
 import Navbar from "../components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+
 import thunderbolt from "../assets/thunderbolt.svg";
 import { FiMail } from "react-icons/fi";
 import tailwind from "../assets/svg-tailwind.svg";
 import html from "../assets/html.svg";
 import css from "../assets/css.svg";
+
 import About from "./About";
 import Skills from "./Skills";
 import Contact from "./Contact";
+import Projects from "./Projects";
+import Footer from "./Footer";
+import AnimatedBackground from "./AnimatedBackground";
 
 export default function Home() {
   const roles = [
@@ -24,7 +29,6 @@ export default function Home() {
     const timeout = setTimeout(() => {
       setIndex((prev) => (prev + 1) % roles.length);
     }, 4000);
-
     return () => clearTimeout(timeout);
   }, [index]);
 
@@ -33,33 +37,39 @@ export default function Home() {
   }, []);
 
   return (
-    <div id="home" className=" relative bg-linear-to-br from-black from-30% to-orange-600 overflow-hidden">
-      {/* SVG Decorations */}
+    <div
+      id="home"
+      className="relative min-h-screen overflow-hidden"
+    >
+      {/* Decorative SVGs */}
       <motion.img
         src={thunderbolt}
-        alt="decor top-right"
-        className="fixed top-15 left-250 w-32 h-32 md:w-80 md:h-80 opacity-50 z-0"
+        alt="decor top"
+        className="absolute top-10 right-5 w-20 h-20 md:w-40 md:h-40 opacity-40 z-0"
         animate={{ rotate: [0, 10, -10, 0] }}
         transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
       />
+
       <motion.img
         src={thunderbolt}
-        alt="decor bottom-left"
-        className="fixed top-70 right-220 w-32 h-32 md:w-110 md:h-110 opacity-50 z-0"
+        alt="decor bottom"
+        className="absolute bottom-10 left-5 w-20 h-20 md:w-40 md:h-40 opacity-40 z-0"
         animate={{ rotate: [0, -10, 10, 0] }}
         transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
       />
 
+      <AnimatedBackground />
       <Navbar />
 
-      <div className="px-10 pt-40 z-10 relative">
-        <h2 className="text-gray-500 font-poppins text-4xl md:text-[40px]">
-          Hey, I am <span className="text-orange-500">Tartor</span>
+      {/* Hero Section */}
+      <div className="px-6 md:px-16 pt-36 md:pt-44 z-10 relative max-w-4xl">
+        <h2 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
+          Hey, I am <span className="text-white">Tartor</span>
         </h2>
 
-        <h2 className="text-2xl sm:text-3xl md:text-[55px] mt-3 text-gray-500 font-poppins flex flex-wrap items-center gap-3 leading-tight">
+        <h2 className="text-xl sm:text-3xl md:text-[55px] mt-3 text-gray-300 font-poppins flex flex-wrap items-center gap-2 leading-tight">
           A{" "}
-          <span className="h-[50px] sm:h-[60px] flex text-center items-center">
+          <span className="h-[45px] sm:h-[55px] flex items-center">
             <AnimatePresence mode="wait">
               <motion.span
                 key={roles[index]}
@@ -74,69 +84,73 @@ export default function Home() {
           </span>
         </h2>
 
-        <h2 className="mt-4 text-gray-300 text-lg md:text-lg font-poppins leading-relaxed max-w-sm md:max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
+        <p className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
           Building modern, responsive web applications with clean design and
           seamless user experiences, turning ideas into intuitive, fast, and
           engaging digital products.
-        </h2>
+        </p>
 
-        <div className="flex items-center gap-4 mt-3 flex-wrap">
-          <button className="text-white font-poppins p-2 px-4 rounded-full text-[18px] bg-orange-500">
+        <div className="flex items-center gap-4 mt-4 flex-wrap">
+          <button className="text-white font-poppins px-6 py-2 rounded-full text-lg bg-orange-500">
             Hire me
           </button>
 
-          <button className="p-3 text-white border-white border text-[18px] rounded-full">
+          <button className="p-3 text-white border border-white text-lg rounded-full">
             <FiMail />
           </button>
         </div>
       </div>
-      {/* Bottom-right skill circles */}
-      <div className="absolute top-60 left-230 flex items-center justify-center">
-        <motion.div className="relative w-[300px] h-[300px] md:w-[370px] md:h-[370px]">
-          {/* Outer circle */}
+
+      {/* Skill Circles */}
+      <div className="relative w-full flex justify-center mt-20 mb-20 md:mb-32">
+        <motion.div
+          className="relative w-[260px] h-[260px] md:w-[360px] md:h-[360px]"
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+        >
+          {/* Outer Circle */}
           <div className="absolute inset-0 border border-gray-400 rounded-full flex items-center justify-center">
-            {/* Tailwind icon (outer circle) */}
             <img
               src={tailwind}
-              className="absolute -top-10 right-1/2 translate-x-1/2 
-        w-14 h-14 md:w-20 md:h-20 
-        p-3 rounded-full backdrop-blur-xl 
-        bg-white/20 border border-white/30 shadow-lg"
-              alt="tailwind"
+              className="absolute -top-10 left-1/2 -translate-x-1/2 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
+          backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
             />
 
-            {/* Middle circle */}
-            <div className="w-[200px] h-[200px] md:w-[270px] md:h-[270px] border border-gray-400 rounded-full flex items-center justify-center">
-              {/* HTML icon */}
+            {/* Middle Circle */}
+            <motion.div
+              className="w-[180px] h-[180px] md:w-[250px] md:h-[250px] border border-gray-400 rounded-full flex items-center justify-center"
+              // animate={{ rotate: -360 }}
+              // transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+            >
               <img
                 src={html}
-                className="absolute top-1/2 left-0 -translate-x-1/2 
-    w-14 h-14 md:w-20 md:h-20 
-    p-3 rounded-full backdrop-blur-xl 
-    bg-white/20 border border-white/30 shadow-lg"
-                alt="html"
+                className="absolute top-1/2 -translate-y-1/2 -left-8 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
+            backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
               />
 
-              {/* Inner circle */}
-              <div className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] border border-gray-400 rounded-full flex items-center justify-center">
-                {/* CSS icon */}
+              {/* Inner Circle */}
+              <motion.div
+                className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] border border-gray-400 rounded-full flex items-center justify-center"
+                // animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+              >
                 <img
                   src={css}
-                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 
-            w-14 h-14 md:w-20 md:h-20 
-            p-3 rounded-full backdrop-blur-xl 
-            bg-white/20 border border-white/30 shadow-lg"
-                  alt="css"
+                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
+              backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
- <About id="about" className="scroll-mt-24" />
- <Skills id="skills" className="scroll-mt-24" />
- <Contact id="contact" className="scroll-mt-24" />
 
+      {/* Sections */}
+      <About id="about" />
+      <Skills id="skills" />
+      <Projects id="projects" />
+      <Contact id="contact" />
+      <Footer />
     </div>
   );
 }
