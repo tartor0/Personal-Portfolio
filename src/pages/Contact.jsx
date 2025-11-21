@@ -25,7 +25,7 @@ export default function Contact({ id, className = "" }) {
       <div className="flex justify-center gap-6 mb-10 flex-wrap" data-aos="fade-up">
         <button
           className={`flex items-center gap-2 px-6 py-3 rounded-full text-[18px] transition ${
-            activeTab === "contact" ? "bg-orange-500" : "bg-gray-700/40 backdrop-blur-md"
+            activeTab === "contact" ? "bg-orange-800" : "bg-gray-700/40 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("contact")}
         >
@@ -33,7 +33,7 @@ export default function Contact({ id, className = "" }) {
         </button>
         <button
           className={`flex items-center gap-2 px-6 py-3 rounded-full text-[18px] transition ${
-            activeTab === "support" ? "bg-orange-500" : "bg-gray-700/40 backdrop-blur-md"
+            activeTab === "support" ? "bg-orange-800" : "bg-gray-700/40 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("support")}
         >
@@ -68,7 +68,7 @@ export default function Contact({ id, className = "" }) {
             <input type="text" placeholder="Your Name" className="p-3 rounded-md bg-gray-700 text-white focus:outline-none" />
             <input type="email" placeholder="Your Email" className="p-3 rounded-md bg-gray-700 text-white focus:outline-none" />
             <textarea placeholder="Your Message" rows={5} className="p-3 rounded-md bg-gray-700 text-white focus:outline-none"></textarea>
-            <button type="submit" className="bg-orange-500 px-4 py-3 rounded-full font-semibold hover:bg-orange-600 transition">
+            <button type="submit" className="bg-orange-800 px-4 py-3 rounded-full font-semibold hover:bg-orange-600 transition">
               Send Message
             </button>
           </form>

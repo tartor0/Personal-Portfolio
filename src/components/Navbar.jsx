@@ -32,13 +32,13 @@ export default function Navbar() {
             <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
           </div>
 
-          <button className="flex items-center border-2 border-orange-500 rounded-full px-5 py-2 hover:cursor-pointer">
-            <div className="flex items-center justify-center pr-3 border-r border-gray-400">
+          <button className="flex items-center bg-gray-500 rounded-full px-5 py-2 hover:cursor-pointer">
+            <div className="flex items-center justify-center pr-3 border-r-2 border-gray-400">
               <FiDownload size={24} />
             </div>
             <div className="flex flex-col pl-3">
               <span className="font-semibold">Download</span>
-              <span className="text-sm text-gray-300">Resume</span>
+              <span className="text-sm text-gray-300 font-semibold">Resume</span>
             </div>
           </button>
         </div>

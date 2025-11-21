@@ -33,19 +33,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div id="home" className=" relative bg-linear-to-br from-black from-30% to-orange-500 overflow-hidden">
+    <div id="home" className=" relative bg-linear-to-br from-black from-30% to-orange-600 overflow-hidden">
       {/* SVG Decorations */}
       <motion.img
         src={thunderbolt}
         alt="decor top-right"
-        className="fixed top-10 left-265 w-32 h-32 md:w-80 md:h-80 opacity-50 z-0"
+        className="fixed top-15 left-250 w-32 h-32 md:w-80 md:h-80 opacity-50 z-0"
         animate={{ rotate: [0, 10, -10, 0] }}
         transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
       />
       <motion.img
         src={thunderbolt}
         alt="decor bottom-left"
-        className="fixed top-90 right-260 w-32 h-32 md:w-90 md:h-90 opacity-50 z-0"
+        className="fixed top-70 right-220 w-32 h-32 md:w-110 md:h-110 opacity-50 z-0"
         animate={{ rotate: [0, -10, 10, 0] }}
         transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
       />
@@ -74,7 +74,7 @@ export default function Home() {
           </span>
         </h2>
 
-        <h2 className="mt-4 text-gray-300 text-lg md:text-xl font-poppins leading-relaxed max-w-sm md:max-w-md backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
+        <h2 className="mt-4 text-gray-300 text-lg md:text-lg font-poppins leading-relaxed max-w-sm md:max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
           Building modern, responsive web applications with clean design and
           seamless user experiences, turning ideas into intuitive, fast, and
           engaging digital products.

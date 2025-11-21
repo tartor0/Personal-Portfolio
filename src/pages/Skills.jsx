@@ -58,7 +58,7 @@ export default function Skills({ id, className = "" }) {
             data-aos="fade-up"
             data-aos-delay={idx * 100}
           >
-            <IconComponent className="text-orange-500 w-10 h-10 md:w-14 md:h-14" />
+            <IconComponent className="text-gray-500 w-10 h-10 md:w-14 md:h-14" />
             <span className="text-gray-300 font-medium">{skill.name}</span>
           </div>
         );
@@ -79,7 +79,7 @@ export default function Skills({ id, className = "" }) {
       <div className="flex justify-center gap-4 mb-8 flex-wrap">
         <button
           className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "frontend" ? "bg-orange-500 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
+            activeTab === "frontend" ? "bg-orange-800  text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("frontend")}
           data-aos="fade-up"
@@ -89,7 +89,7 @@ export default function Skills({ id, className = "" }) {
 
         <button
           className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "backend" ? "bg-orange-500 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
+            activeTab === "backend" ? "bg-orange-800 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("backend")}
           data-aos="fade-up"
@@ -100,7 +100,7 @@ export default function Skills({ id, className = "" }) {
 
         <button
           className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "tools" ? "bg-orange-500 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
+            activeTab === "tools" ? "bg-orange-800 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("tools")}
           data-aos="fade-up"

@@ -48,7 +48,7 @@ export default function About({ id, className = "" }) {
           {/* Who Am I / Approach */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3 p-4 bg-gray-800/40 backdrop-blur-md rounded-xl shadow-lg" data-aos="fade-up">
-              <FaUser className="text-orange-500 w-8 h-8" />
+              <FaUser className="text-gray-600 w-8 h-8" />
               <div>
                 <h3 className="font-semibold text-lg md:text-xl">Who Am I</h3>
                 <p className="text-gray-300 text-sm md:text-base">
@@ -58,7 +58,7 @@ export default function About({ id, className = "" }) {
             </div>
 
             <div className="flex items-center gap-3 p-4 bg-gray-800/40 backdrop-blur-md rounded-xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
-              <FaLightbulb className="text-orange-500 w-8 h-8" />
+              <FaLightbulb className="text-gray-600 w-8 h-8" />
               <div>
                 <h3 className="font-semibold text-lg md:text-xl">My Approach</h3>
                 <p className="text-gray-300 text-sm md:text-base">
@@ -69,9 +69,9 @@ export default function About({ id, className = "" }) {
           </div>
 
           {/* Personal Information Grid */}
-          <div className="bg-gray-900/40 backdrop-blur-md rounded-2xl p-6 shadow-lg" data-aos="fade-up" data-aos-delay="200">
+          <div className="bg-gray-900/40 backdrop-blur-md rounded-2xl p-10 shadow-lg" data-aos="fade-up" data-aos-delay="200">
             <h1 className="flex items-center gap-3 text-2xl md:text-3xl font-semibold mb-6">
-              <FaIdBadge className="text-orange-500 w-8 h-8" /> Personal Information
+              <FaIdBadge className="text-orange-800 w-8 h-8" /> Personal Information
             </h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
@@ -82,7 +82,7 @@ export default function About({ id, className = "" }) {
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
-                  <item.icon className="text-orange-500 w-6 h-6" />
+                  <item.icon className="text-gray-600 w-6 h-6" />
                   <span>{item.label}: {item.value}</span>
                 </div>
               ))}
