@@ -10,14 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@stianlarsen/react-fade-effects": "^1.0.7",
     "@tailwindcss/vite": "^4.1.17",
     "aos": "^2.3.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.6",
-    "react-text-loop": "^2.3.0",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {

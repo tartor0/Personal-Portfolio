@@ -7,15 +7,15 @@ export default function Navbar() {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -96; // adjust to navbar height
+      const yOffset = -96;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
-    setOpen(false); // close mobile menu
+    setOpen(false);
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md text-white py-4 px-5 md:px-10 font-poppins-med shadow-lg">
+    <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-md text-white py-4 px-5 md:px-10 font-poppins-med shadow-lg">
       <div className="flex justify-between items-center">
         {/* Logo */}
         <h1 className="text-[30px]">Tartor</h1>
