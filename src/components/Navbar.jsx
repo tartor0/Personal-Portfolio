@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
-export default function Navbar() {
+export default function Navbar({ onDownload }) {
   const [open, setOpen] = useState(false);
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -96; // adjust for navbar height
+      const yOffset = -96; // Adjust for navbar height
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
-    setOpen(false); // close mobile menu on click
+    setOpen(false); // Close mobile menu on click
   };
 
   return (
@@ -32,13 +32,16 @@ export default function Navbar() {
             <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
           </div>
 
-          <button className="flex items-center bg-gray-500 rounded-full px-5 py-2 hover:cursor-pointer">
+          {/* Download Resume Button */}
+          <button
+            onClick={onDownload}
+            className="flex items-center bg-gray-500 rounded-full px-5 py-2 hover:cursor-pointer"
+          >
             <div className="flex items-center justify-center pr-3 border-r-2 border-gray-400">
               <FiDownload size={24} />
             </div>
             <div className="flex flex-col pl-3">
-              <span className="font-semibold">Download</span>
-              <span className="text-sm text-gray-300 font-semibold">Resume</span>
+              <span className="font-semibold">Download Resume</span>
             </div>
           </button>
         </div>
@@ -58,7 +61,11 @@ export default function Navbar() {
           <button onClick={() => scrollToSection("projects")} className="hover:text-orange-500">Projects</button>
           <button onClick={() => scrollToSection("contact")} className="hover:text-orange-500">Connect</button>
 
-          <button className="mt-3 flex items-center gap-2 border border-gray-400 rounded-full px-4 py-2 w-fit">
+          {/* Mobile Download Button */}
+          <button
+            onClick={onDownload}
+            className="mt-3 flex items-center gap-2 border border-gray-400 rounded-full px-4 py-2 w-fit"
+          >
             <FiDownload /> Download Resume
           </button>
         </div>

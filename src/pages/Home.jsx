@@ -1,19 +1,72 @@
-import Navbar from "../components/Navbar";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-
-import thunderbolt from "../assets/thunderbolt.svg";
 import { FiMail } from "react-icons/fi";
-import tailwind from "../assets/svg-tailwind.svg";
-import html from "../assets/html.svg";
-import css from "../assets/css.svg";
 
+import Navbar from "../components/Navbar";
 import About from "./About";
 import Skills from "./Skills";
-import Contact from "./Contact";
 import Projects from "./Projects";
+import Contact from "./Contact";
 import Footer from "./Footer";
 import AnimatedBackground from "./AnimatedBackground";
+import ResumePreview from "./ResumePreview";
+
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+// Multi-page PDF generator, with padding for smooth page breaks
+const handleDownloadPDF = async (resumeRef) => {
+  if (!resumeRef.current) return;
+  await new Promise(res => setTimeout(res, 100));
+
+  const canvas = await html2canvas(resumeRef.current, { scale: 3, useCORS: true });
+  const imgWidthPx = canvas.width;
+  const imgHeightPx = canvas.height;
+
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+
+  const mmPerPx = pdfWidth / imgWidthPx;
+  const pageHeightPx = pdfHeight / mmPerPx;
+
+  let position = 0;
+  const cropPaddingPx = 60; // overlap padding for cleaner splits
+
+  while (position < imgHeightPx) {
+    const remainingHeightPx = imgHeightPx - position;
+    let captureHeightPx = Math.min(pageHeightPx, remainingHeightPx);
+
+    let cropTop = position;
+    let cropBottom = position + captureHeightPx;
+
+    if (position > 0) cropTop = Math.max(0, cropTop - cropPaddingPx);
+    if (remainingHeightPx > pageHeightPx) cropBottom = Math.min(imgHeightPx, cropBottom + cropPaddingPx);
+
+    const actualHeightPx = cropBottom - cropTop;
+
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = imgWidthPx;
+    pageCanvas.height = actualHeightPx;
+    pageCanvas.getContext('2d').drawImage(
+      canvas,
+      0, cropTop, imgWidthPx, actualHeightPx,
+      0, 0, imgWidthPx, actualHeightPx
+    );
+    const pageImgData = pageCanvas.toDataURL('image/png');
+
+    if (position === 0) {
+      pdf.addImage(pageImgData, "PNG", 0, 0, pdfWidth, actualHeightPx * mmPerPx);
+    } else {
+      pdf.addPage();
+      pdf.addImage(pageImgData, "PNG", 0, 0, pdfWidth, actualHeightPx * mmPerPx);
+    }
+
+    position += captureHeightPx;
+  }
+
+  pdf.save("Tartor_Gaadi_Resume.pdf");
+};
 
 export default function Home() {
   const roles = [
@@ -22,8 +75,8 @@ export default function Home() {
     "Fullstack Developer",
     "Frontend Developer",
   ];
-
   const [index, setIndex] = useState(0);
+  const resumeRef = useRef();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -36,30 +89,12 @@ export default function Home() {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const downloadPDF = () => handleDownloadPDF(resumeRef);
+
   return (
-    <div
-      id="home"
-      className="relative min-h-screen overflow-hidden"
-    >
-      {/* Decorative SVGs */}
-      <motion.img
-        src={thunderbolt}
-        alt="decor top"
-        className="absolute top-10 right-5 w-20 h-20 md:w-40 md:h-40 opacity-40 z-0"
-        animate={{ rotate: [0, 10, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
-      />
-
-      <motion.img
-        src={thunderbolt}
-        alt="decor bottom"
-        className="absolute bottom-10 left-5 w-20 h-20 md:w-40 md:h-40 opacity-40 z-0"
-        animate={{ rotate: [0, -10, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
-      />
-
+    <div id="home" className="relative min-h-screen overflow-hidden">
       <AnimatedBackground />
-      <Navbar />
+      <Navbar onDownload={downloadPDF} />
 
       {/* Hero Section */}
       <div className="px-6 md:px-16 pt-36 md:pt-44 z-10 relative max-w-4xl">
@@ -85,64 +120,17 @@ export default function Home() {
         </h2>
 
         <p className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
-          Building modern, responsive web applications with clean design and
-          seamless user experiences, turning ideas into intuitive, fast, and
-          engaging digital products.
+          Building modern, responsive web applications with clean design and seamless user experiences, turning ideas into intuitive, fast, and engaging digital products.
         </p>
 
         <div className="flex items-center gap-4 mt-4 flex-wrap">
           <button className="text-white font-poppins px-6 py-2 rounded-full text-lg bg-orange-500">
             Hire me
           </button>
-
           <button className="p-3 text-white border border-white text-lg rounded-full">
             <FiMail />
           </button>
         </div>
-      </div>
-
-      {/* Skill Circles */}
-      <div className="relative w-full flex justify-center mt-20 mb-20 md:mb-32">
-        <motion.div
-          className="relative w-[260px] h-[260px] md:w-[360px] md:h-[360px]"
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-        >
-          {/* Outer Circle */}
-          <div className="absolute inset-0 border border-gray-400 rounded-full flex items-center justify-center">
-            <img
-              src={tailwind}
-              className="absolute -top-10 left-1/2 -translate-x-1/2 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
-          backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
-            />
-
-            {/* Middle Circle */}
-            <motion.div
-              className="w-[180px] h-[180px] md:w-[250px] md:h-[250px] border border-gray-400 rounded-full flex items-center justify-center"
-              // animate={{ rotate: -360 }}
-              // transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-            >
-              <img
-                src={html}
-                className="absolute top-1/2 -translate-y-1/2 -left-8 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
-            backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
-              />
-
-              {/* Inner Circle */}
-              <motion.div
-                className="w-[100px] h-[100px] md:w-[150px] md:h-[150px] border border-gray-400 rounded-full flex items-center justify-center"
-                // animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-              >
-                <img
-                  src={css}
-                  className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-14 h-14 md:w-20 md:h-20 p-3 rounded-full 
-              backdrop-blur-xl bg-white/20 border border-white/30 shadow-lg"
-                />
-              </motion.div>
-            </motion.div>
-          </div>
-        </motion.div>
       </div>
 
       {/* Sections */}
@@ -151,6 +139,20 @@ export default function Home() {
       <Projects id="projects" />
       <Contact id="contact" />
       <Footer />
+
+      {/* Hidden ResumePreview for PDF, positioned off-screen, never display:none */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: "-9999px",
+          width: "210mm",
+          background: "white",
+          zIndex: 999,
+        }}
+      >
+        <ResumePreview ref={resumeRef} />
+      </div>
     </div>
   );
 }

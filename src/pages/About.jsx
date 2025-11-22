@@ -77,7 +77,7 @@ export default function About({ id, className = "" }) {
           </div>
 
           {/* Personal Information Grid */}
-          <div className="bg-gray-800 backdrop-blur-md rounded-2xl p-10 shadow-xl" data-aos="fade-up" data-aos-delay="200">
+          <div className="bg-gray-800/40 backdrop-blur-md rounded-2xl p-10 shadow-xl" data-aos="fade-up" data-aos-delay="200">
             <h1 className="flex items-center gap-3 text-2xl md:text-3xl font-semibold mb-6">
               <FaIdBadge className="text-gray-600 w-8 h-8" /> Personal Information
             </h1>
