@@ -41,23 +41,23 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="px-6 md:px-16 pt-36 md:pt-44 z-10 relative max-w-4xl">
-        <div
-          className="
-    fixed left-1/2 top-24 -translate-x-1/2
-    inline-flex items-center gap-2
-    bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full
-    backdrop-blur-md shadow-lg z-50 font-poppins cursor-pointer
-  "
-        >
-          {/* Green circle */}
-          <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
-            <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
-          </span>
-          {/* Text */}
-          <p className="text-green-300 text-sm text-center">
-            Available for collaborations
-          </p>
-        </div>
+
+  <div
+    className="absolute top-24
+      inline-flex items-center gap-2 
+      bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full 
+      backdrop-blur-md shadow-lg z-50 font-poppins cursor-pointer"
+  >
+    {/* Green circle */}
+    <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
+      <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
+    </span>
+    {/* Text */}
+    <p className="text-green-300 text-sm text-center">
+      Available for collaborations
+    </p>
+  </div>
+
 
         <h2 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
           Hey, I am <span className="text-white">Tartor</span>
