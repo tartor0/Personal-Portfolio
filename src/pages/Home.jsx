@@ -10,64 +10,7 @@ import Contact from "./Contact";
 import Footer from "./Footer";
 import AnimatedBackground from "./AnimatedBackground";
 import ResumePreview from "./ResumePreview";
-
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-
-// Multi-page PDF generator, with padding for smooth page breaks
-const handleDownloadPDF = async (resumeRef) => {
-  if (!resumeRef.current) return;
-  await new Promise(res => setTimeout(res, 100));
-
-  const canvas = await html2canvas(resumeRef.current, { scale: 3, useCORS: true });
-  const imgWidthPx = canvas.width;
-  const imgHeightPx = canvas.height;
-
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
-
-  const mmPerPx = pdfWidth / imgWidthPx;
-  const pageHeightPx = pdfHeight / mmPerPx;
-
-  let position = 0;
-  const cropPaddingPx = 60; // overlap padding for cleaner splits
-
-  while (position < imgHeightPx) {
-    const remainingHeightPx = imgHeightPx - position;
-    let captureHeightPx = Math.min(pageHeightPx, remainingHeightPx);
-
-    let cropTop = position;
-    let cropBottom = position + captureHeightPx;
-
-    if (position > 0) cropTop = Math.max(0, cropTop - cropPaddingPx);
-    if (remainingHeightPx > pageHeightPx) cropBottom = Math.min(imgHeightPx, cropBottom + cropPaddingPx);
-
-    const actualHeightPx = cropBottom - cropTop;
-
-    const pageCanvas = document.createElement('canvas');
-    pageCanvas.width = imgWidthPx;
-    pageCanvas.height = actualHeightPx;
-    pageCanvas.getContext('2d').drawImage(
-      canvas,
-      0, cropTop, imgWidthPx, actualHeightPx,
-      0, 0, imgWidthPx, actualHeightPx
-    );
-    const pageImgData = pageCanvas.toDataURL('image/png');
-
-    if (position === 0) {
-      pdf.addImage(pageImgData, "PNG", 0, 0, pdfWidth, actualHeightPx * mmPerPx);
-    } else {
-      pdf.addPage();
-      pdf.addImage(pageImgData, "PNG", 0, 0, pdfWidth, actualHeightPx * mmPerPx);
-    }
-
-    position += captureHeightPx;
-  }
-
-  pdf.save("Tartor_Gaadi_Resume.pdf");
-};
-
+import { handleDownloadPDF } from "../utils/pdfGenerator";
 export default function Home() {
   const roles = [
     "React Enthusiast",
@@ -98,6 +41,24 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="px-6 md:px-16 pt-36 md:pt-44 z-10 relative max-w-4xl">
+        <div
+          className="
+    fixed left-1/2 top-24 -translate-x-1/2
+    inline-flex items-center gap-2
+    bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full
+    backdrop-blur-md shadow-lg z-50 font-poppins cursor-pointer
+  "
+        >
+          {/* Green circle */}
+          <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
+            <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
+          </span>
+          {/* Text */}
+          <p className="text-green-300 text-sm text-center">
+            Available for collaborations
+          </p>
+        </div>
+
         <h2 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
           Hey, I am <span className="text-white">Tartor</span>
         </h2>
@@ -120,7 +81,9 @@ export default function Home() {
         </h2>
 
         <p className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
-          Building modern, responsive web applications with clean design and seamless user experiences, turning ideas into intuitive, fast, and engaging digital products.
+          Building modern, responsive web applications with clean design and
+          seamless user experiences, turning ideas into intuitive, fast, and
+          engaging digital products.
         </p>
 
         <div className="flex items-center gap-4 mt-4 flex-wrap">
