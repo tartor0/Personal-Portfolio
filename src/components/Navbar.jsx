@@ -61,17 +61,19 @@ export default function Navbar({ onDownload }) {
       {/* Mobile Dropdown Menu */}
       {open && (
         <div className="fixed inset-0 z-40">
+          {/* Full dark overlay */}
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-md"
+            className="absolute inset-0 bg-black/95"
             onClick={() => setOpen(false)}
           ></div>
 
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-11/12 max-w-sm bg-gray-900/80 backdrop-blur-md rounded-2xl p-6 flex flex-col gap-5 z-50 shadow-lg">
+          {/* Menu panel */}
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-11/12 max-w-sm bg-gray-900 backdrop-blur-md rounded-2xl p-6 flex flex-col gap-5 z-50 shadow-lg">
             {["home", "about", "skills", "projects", "contact"].map((section) => (
               <button
                 key={section}
                 onClick={() => scrollToSection(section)}
-                className="text-white text-lg hover:text-cyan-400 font-medium transition-colors"
+                className="text-white text-lg hover:text-cyan-400 hover:cursor-pointer font-medium transition-colors"
               >
                 {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
