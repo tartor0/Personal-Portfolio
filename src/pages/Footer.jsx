@@ -26,23 +26,23 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-gray-900 text-white py-16 px-6 font-poppins-med">
+    <footer className="w-full py-16 px-6 font-poppins-med relative z-10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-10">
         {/* ABOUT ME */}
-        <div className="md:border-r md:border-gray-700 pr-6">
+        <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg md:border-r md:border-gray-700">
           <h2 className="text-2xl font-semibold mb-2">Tartor Gaadi</h2>
-          <p className="text-gray-400">Full-Stack Developer</p>
+          <p className="text-gray-300">Full-Stack Developer</p>
         </div>
 
         {/* NAVIGATION */}
-        <div className="md:border-r md:border-gray-700 pr-6">
+        <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg md:border-r md:border-gray-700">
           <h3 className="text-xl font-semibold mb-3">Navigation</h3>
           <ul className="grid grid-cols-2 gap-2 text-gray-300">
             {navigation.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.href}
-                  className="hover:text-gray-500 inline-flex items-center gap-2 w-max"
+                  className="hover:text-white/80 inline-flex items-center gap-2 w-max transition-colors"
                 >
                   {item.icon} {item.name}
                 </a>
@@ -52,9 +52,9 @@ export default function Footer() {
         </div>
 
         {/* SOCIALS + SUBSCRIBE */}
-        <div className="flex flex-col md:pl-6">
+        <div className="flex flex-col gap-8">
           {/* SOCIALS */}
-          <div className="mb-8">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg">
             <h3 className="text-xl font-semibold mb-3">Find Me Online</h3>
             <ul className="grid grid-cols-2 gap-3 text-gray-300 text-lg">
               {socials.map((social) => (
@@ -63,7 +63,7 @@ export default function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 hover:text-gray-500 w-max"
+                    className="flex items-center gap-2 hover:text-white/80 transition-colors"
                   >
                     <social.icon /> {social.name}
                   </a>
@@ -73,21 +73,21 @@ export default function Footer() {
           </div>
 
           {/* SUBSCRIBE */}
-          <div className="w-full max-w-lg">
+          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg">
             <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
               <FiSend /> Subscribe to Newsletter
             </h3>
-            <p className="text-gray-400 mb-4">
+            <p className="text-gray-300 mb-4">
               Stay updated with my latest projects and articles.
             </p>
 
-            <div className="flex w-full bg-gray-800 rounded-full overflow-hidden">
+            <div className="flex w-full rounded-full overflow-hidden border border-white/20">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 bg-transparent text-white outline-none min-w-0"
               />
-              <button className="flex-shrink-0 w-12 bg-gray-600 hover:bg-gray-500 flex items-center justify-center">
+              <button className="flex-shrink-0 w-12 bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
                 <FiSend className="w-5 h-5" />
               </button>
             </div>
@@ -96,7 +96,7 @@ export default function Footer() {
       </div>
 
       {/* COPYRIGHT */}
-      <div className="text-center text-gray-500 mt-16 text-sm">
+      <div className="text-center text-gray-400 mt-16 text-sm">
         © {new Date().getFullYear()} Tartor Gaadi. All rights reserved.
       </div>
     </footer>

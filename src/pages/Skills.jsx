@@ -23,7 +23,7 @@ export default function Skills({ id, className = "" }) {
   const [activeTab, setActiveTab] = useState("frontend");
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: false });
+    AOS.init({ duration: 800, once: true });
   }, []);
 
   const frontendSkills = [
@@ -48,18 +48,18 @@ export default function Skills({ id, className = "" }) {
   ];
 
   const renderSkills = (skills) => (
-    <div className="grid px-4 sm:px-10 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 gap-6 mt-6">
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
       {skills.map((skill, idx) => {
         const IconComponent = skill.icon;
         return (
           <div
             key={idx}
-            className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-900/50 backdrop-blur-md rounded-xl shadow-lg hover:scale-105 transition-transform"
             data-aos="fade-up"
             data-aos-delay={idx * 100}
+            className="flex flex-col items-center justify-center gap-2 p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
-            <IconComponent className="text-gray-500 w-10 h-10 md:w-14 md:h-14" />
-            <span className="text-gray-300 font-medium">{skill.name}</span>
+            <IconComponent className="text-gray-200 w-12 h-12 md:w-16 md:h-16" />
+            <span className="text-white font-medium mt-2">{skill.name}</span>
           </div>
         );
       })}
@@ -67,52 +67,51 @@ export default function Skills({ id, className = "" }) {
   );
 
   return (
-    <div id={id} className={`${className} min-h-screen px-6 md:px-10 py-20 font-poppins text-white`}>
-      <h1 className="text-4xl md:text-5xl font-semibold text-center mb-4" data-aos="fade-down">
+    <section
+      id={id}
+      className={`${className} w-full py-16 md:py-20 px-4 md:px-10 font-poppins-med text-white`}
+    >
+      <h1
+        className="text-4xl md:text-5xl font-semibold text-center mb-4"
+        data-aos="fade-down"
+      >
         Skills
       </h1>
-      <p className="text-gray-300 text-center max-w-xl mx-auto mb-10" data-aos="fade-up" data-aos-delay="100">
+      <p
+        className="text-gray-300 text-center max-w-2xl mx-auto mb-10"
+        data-aos="fade-down"
+        data-aos-delay="100"
+      >
         Tools and technologies I’ve mastered or currently exploring.
       </p>
 
       {/* Tabs */}
-      <div className="flex justify-center gap-4 mb-8 flex-wrap">
-        <button
-          className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "frontend" ? "bg-gray-700  text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
-          }`}
-          onClick={() => setActiveTab("frontend")}
-          data-aos="fade-up"
-        >
-          <FaReact className="w-5 h-5" /> Frontend
-        </button>
-
-        <button
-          className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "backend" ? "bg-gray-700 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
-          }`}
-          onClick={() => setActiveTab("backend")}
-          data-aos="fade-up"
-          data-aos-delay="50"
-        >
-          <FaServer className="w-5 h-5" /> Backend
-        </button>
-
-        <button
-          className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium ${
-            activeTab === "tools" ? "bg-gray-700 text-white shadow-lg" : "bg-gray-800/40 text-gray-300 backdrop-blur-md"
-          }`}
-          onClick={() => setActiveTab("tools")}
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <FaGithub className="w-5 h-5" /> Other Tools
-        </button>
+      <div className="flex justify-center flex-wrap gap-4 mb-10">
+        {[
+          { name: "frontend", label: "Frontend", icon: FaReact },
+          { name: "backend", label: "Backend", icon: FaServer },
+          { name: "tools", label: "Other Tools", icon: FaGithub },
+        ].map((tab, idx) => (
+          <button
+            key={tab.name}
+            onClick={() => setActiveTab(tab.name)}
+            data-aos="fade-up"
+            data-aos-delay={idx * 50}
+            className={`flex items-center gap-2 px-5 py-3 rounded-full font-medium transition-all duration-300 ${
+              activeTab === tab.name
+                ? "bg-white/20 text-white shadow-lg"
+                : "bg-white/10 text-gray-300 backdrop-blur-md"
+            }`}
+          >
+            <tab.icon className="w-5 h-5" /> {tab.label}
+          </button>
+        ))}
       </div>
 
+      {/* Render Selected Skills */}
       {activeTab === "frontend" && renderSkills(frontendSkills)}
       {activeTab === "backend" && renderSkills(backendSkills)}
       {activeTab === "tools" && renderSkills(otherTools)}
-    </div>
+    </section>
   );
 }

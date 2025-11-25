@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import AnimatedBackground from "./AnimatedBackground";
 import ResumePreview from "./ResumePreview";
 import { handleDownloadPDF } from "../utils/pdfGenerator";
+
 export default function Home() {
   const roles = [
     "React Enthusiast",
@@ -35,34 +36,36 @@ export default function Home() {
   const downloadPDF = () => handleDownloadPDF(resumeRef);
 
   return (
-    <div id="home" className="relative min-h-screen overflow-hidden">
+    <div id="home" className="relative min-h-screen overflow-hidden text-white">
+      {/* Animated background */}
       <AnimatedBackground />
-      <Navbar onDownload={downloadPDF} />
+
+      {/* Navbar */}
+      <Navbar onDownload={downloadPDF} className="z-50 relative" />
 
       {/* Hero Section */}
-      <div className="px-6 md:px-16 pt-36 md:pt-44 z-10 relative max-w-4xl">
+      <div className="relative z-10 flex flex-col justify-center items-start min-h-screen px-6 md:px-16 pt-36 md:pt-44 max-w-4xl">
+        {/* Available indicator */}
+        <motion.div
+          className="absolute top-24 inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg font-poppins cursor-pointer"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
+            <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
+          </span>
+          <p className="text-green-300 text-sm text-center">
+            Available for collaborations
+          </p>
+        </motion.div>
 
-  <div
-    className="absolute top-24
-      inline-flex items-center gap-2 
-      bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full 
-      backdrop-blur-md shadow-lg z-50 font-poppins cursor-pointer"
-  >
-    {/* Green circle */}
-    <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
-      <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
-    </span>
-    {/* Text */}
-    <p className="text-green-300 text-sm text-center">
-      Available for collaborations
-    </p>
-  </div>
-
-
-        <h2 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
+        {/* Heading */}
+        <h1 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
           Hey, I am <span className="text-white">Tartor</span>
-        </h2>
+        </h1>
 
+        {/* Role Animation */}
         <h2 className="text-xl sm:text-3xl md:text-[55px] mt-3 text-gray-300 font-poppins flex flex-wrap items-center gap-2 leading-tight">
           A{" "}
           <span className="h-[45px] sm:h-[55px] flex items-center">
@@ -73,6 +76,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
+                className="text-white font-semibold"
               >
                 {roles[index]}
               </motion.span>
@@ -80,20 +84,32 @@ export default function Home() {
           </span>
         </h2>
 
-        <p className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg">
+        {/* Description */}
+        <motion.p
+          className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
           Building modern, responsive web applications with clean design and
           seamless user experiences, turning ideas into intuitive, fast, and
           engaging digital products.
-        </p>
+        </motion.p>
 
-        <div className="flex items-center gap-4 mt-4 flex-wrap">
-          <button className="text-white font-poppins px-6 py-2 rounded-full text-lg bg-orange-500">
+        {/* Call to Action Buttons */}
+        <motion.div
+          className="flex items-center gap-4 mt-6 flex-wrap"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+        >
+          <button className="text-white font-poppins px-6 py-2 rounded-2xl text-lg bg-gray-500/50 hover:bg-gray-500 hover:cursor-pointer border transition">
             Hire me
           </button>
-          <button className="p-3 text-white border border-white text-lg rounded-full">
+          <button className="p-3 text-white border border-white text-lg rounded-full hover:bg-white/20 transition">
             <FiMail />
           </button>
-        </div>
+        </motion.div>
       </div>
 
       {/* Sections */}
@@ -103,7 +119,7 @@ export default function Home() {
       <Contact id="contact" />
       <Footer />
 
-      {/* Hidden ResumePreview for PDF, positioned off-screen, never display:none */}
+      {/* Hidden ResumePreview for PDF */}
       <div
         style={{
           position: "fixed",

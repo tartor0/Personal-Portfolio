@@ -14,7 +14,7 @@ export default function Contact({ id, className = "" }) {
   return (
     <div
       id={id}
-      className={`${className} min-h-screen px-6 md:px-10 font-poppins-med text-white py-20`}
+      className={`${className} min-h-screen px-6 md:px-10 font-poppins-med text-white py-20 relative z-10`}
     >
       {/* Header */}
       <h1 className="text-4xl md:text-5xl text-center mb-4" data-aos="fade-down">
@@ -25,7 +25,7 @@ export default function Contact({ id, className = "" }) {
         data-aos="fade-down"
         data-aos-delay="100"
       >
-        Reach out to me via form, social media, or support platforms
+        Reach out via form, social media, or support platforms
       </p>
 
       {/* Tabs */}
@@ -33,8 +33,8 @@ export default function Contact({ id, className = "" }) {
         <button
           className={`flex items-center gap-2 px-6 py-3 rounded-full text-[18px] transition ${
             activeTab === "contact"
-              ? "bg-gray-600"
-              : "bg-gray-700/40 backdrop-blur-md"
+              ? "bg-white/20 text-white shadow-lg"
+              : "bg-white/10 text-gray-300 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("contact")}
         >
@@ -43,8 +43,8 @@ export default function Contact({ id, className = "" }) {
         <button
           className={`flex items-center gap-2 px-6 py-3 rounded-full text-[18px] transition ${
             activeTab === "support"
-              ? "bg-gray-600"
-              : "bg-gray-700/40 backdrop-blur-md"
+              ? "bg-white/20 text-white shadow-lg"
+              : "bg-white/10 text-gray-300 backdrop-blur-md"
           }`}
           onClick={() => setActiveTab("support")}
         >
@@ -63,64 +63,61 @@ export default function Contact({ id, className = "" }) {
           <div className="flex flex-col items-center md:items-start gap-4 md:w-1/4 px-10">
             <h2 className="text-xl font-semibold mb-2">Social Links</h2>
             <div className="flex flex-col gap-3 text-xl">
-              <a
-                href="https://github.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-gray-500"
-              >
-                <FaGithub /> GitHub
-              </a>
-              <a
-                href="https://linkedin.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-gray-500"
-              >
-                <FaLinkedin /> LinkedIn
-              </a>
-              <a
-                href="https://instagram.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-gray-500"
-              >
-                <FaInstagram /> Instagram
-              </a>
-              <a
-                href="https://twitter.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-gray-500"
-              >
-                <FaTwitter /> Twitter
-              </a>
+              {[{
+                icon: FaGithub,
+                name: "GitHub",
+                link: "https://github.com/"
+              },{
+                icon: FaLinkedin,
+                name: "LinkedIn",
+                link: "https://linkedin.com/"
+              },{
+                icon: FaInstagram,
+                name: "Instagram",
+                link: "https://instagram.com/"
+              },{
+                icon: FaTwitter,
+                name: "Twitter",
+                link: "https://twitter.com/"
+              }].map((social, idx) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={social.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-300"
+                  >
+                    <Icon /> {social.name}
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          {/* Form — UPDATED WIDTH */}
+          {/* Form */}
           <form
-            className="flex-1 flex flex-col gap-4 bg-gray-700/40 backdrop-blur-md p-6 rounded-2xl shadow-lg 
-            max-w-[550px] mx-auto w-full"
+            className="flex-1 flex flex-col gap-4 bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg max-w-[550px] mx-auto w-full"
           >
             <input
               type="text"
               placeholder="Your Name"
-              className="p-3 rounded-md bg-gray-700 text-white focus:outline-none"
+              className="p-3 rounded-md bg-white/10 text-white backdrop-blur-md focus:outline-none"
             />
             <input
               type="email"
               placeholder="Your Email"
-              className="p-3 rounded-md bg-gray-700 text-white focus:outline-none"
+              className="p-3 rounded-md bg-white/10 text-white backdrop-blur-md focus:outline-none"
             />
             <textarea
               placeholder="Your Message"
               rows={5}
-              className="p-3 rounded-md bg-gray-700 text-white focus:outline-none"
+              className="p-3 rounded-md bg-white/10 text-white backdrop-blur-md focus:outline-none"
             ></textarea>
             <button
               type="submit"
-              className="bg-gray-600 px-4 py-3 rounded-full font-semibold hover:bg-gray-500 hover:cursor-pointer transition"
+              className="bg-white/20 px-4 py-3 rounded-full font-semibold hover:bg-white/30 hover:cursor-pointer transition"
             >
               Send Message
             </button>
@@ -142,7 +139,7 @@ export default function Contact({ id, className = "" }) {
             <img
               src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.patreon.com/"
               alt="Support QR"
-              className="w-36 h-36 md:w-48 md:h-48"
+              className="w-36 h-36 md:w-48 md:h-48 rounded-xl shadow-lg"
             />
           </div>
         </div>

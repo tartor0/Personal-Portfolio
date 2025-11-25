@@ -49,39 +49,25 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="w-full min-h-screen font-poppins-med px-6 md:px-16 py-24 text-white"
+      className="w-full py-16 md:py-20 px-4 md:px-10 font-poppins-med text-white"
     >
-      {/* Header */}
-      <h1
-        className="text-4xl md:text-5xl font-poppins font-semibold text-center"
-        data-aos="fade-down"
-      >
+      <h1 className="text-4xl md:text-5xl font-semibold text-center mb-4" data-aos="fade-down">
         Projects
       </h1>
-
-      {/* Description */}
-      <p
-        className="text-gray-300 text-center mt-4 text-lg max-w-2xl mx-auto"
-        data-aos="fade-down"
-        data-aos-delay="100"
-      >
+      <p className="text-gray-300 text-center mt-4 text-lg max-w-2xl mx-auto" data-aos="fade-down" data-aos-delay="100">
         Explore some of the works I've built.
       </p>
 
-      {/* Buttons */}
-      <div
-        className="flex justify-center flex-wrap gap-4 mt-10"
-        data-aos="fade-up"
-        data-aos-delay="200"
-      >
+      {/* Filter Buttons */}
+      <div className="flex justify-center flex-wrap gap-4 mt-10" data-aos="fade-up" data-aos-delay="200">
         {["all", "frontend", "backend", "fullstack"].map((btn) => (
           <button
             key={btn}
             onClick={() => setFilter(btn)}
             className={`px-5 py-2 rounded-full font-medium capitalize transition-all duration-300 ${
               filter === btn
-                ? "bg-gray-600 text-white shadow-lg"
-                : "border border-gray-500 text-gray-300 hover:bg-gray-800 hover:text-white"
+                ? "bg-white/20 text-white shadow-lg"
+                : "bg-white/10 text-gray-300 backdrop-blur-md"
             }`}
           >
             {btn === "all" ? "All Projects" : btn}
@@ -90,39 +76,33 @@ export default function Projects() {
       </div>
 
       {/* Project Cards */}
-      <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {filteredProjects.map((project, idx) => (
           <div
             key={project.title}
             data-aos="fade-up"
             data-aos-delay={200 + idx * 100}
-            className="bg-gray-900/70 border border-gray-700 rounded-xl p-6 shadow-lg hover:shadow-orange-500/30 hover:-translate-y-2 transition-all duration-300"
+            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
-            <h2 className="text-xl font-semibold mb-2 text-white">
-              {project.title}
-            </h2>
-
+            <h2 className="text-xl font-semibold mb-2 text-white">{project.title}</h2>
             <p className="text-gray-300 text-sm mb-4">{project.description}</p>
-
-            <span className="text-xs px-3 py-1 rounded-full bg-white/10 border border-gray-500">
+            <span className="text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20">
               {project.category.toUpperCase()}
             </span>
-
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-4">
               <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-sm hover:bg-gray-500 hover:scale-105 transition-all duration-300"
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm hover:bg-white/20 hover:scale-105 transition-all duration-300"
               >
                 <FaGithub /> GitHub
               </a>
-
               <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 border border-gray-600 rounded-lg text-sm hover:bg-white/10 hover:scale-105 transition-all duration-300"
+                className="flex items-center gap-2 px-4 py-2 border border-white/20 rounded-lg text-sm hover:bg-white/20 hover:scale-105 transition-all duration-300"
               >
                 <FaExternalLinkAlt /> View
               </a>
