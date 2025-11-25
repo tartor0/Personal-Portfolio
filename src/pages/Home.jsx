@@ -19,6 +19,7 @@ export default function Home() {
     "Fullstack Developer",
     "Frontend Developer",
   ];
+
   const [index, setIndex] = useState(0);
   const resumeRef = useRef();
 
@@ -36,7 +37,7 @@ export default function Home() {
   const downloadPDF = () => handleDownloadPDF(resumeRef);
 
   return (
-    <div id="home" className="relative min-h-screen overflow-hidden text-white">
+    <div id="home" className="relative overflow-hidden text-white">
       {/* Animated background */}
       <AnimatedBackground />
 
@@ -44,24 +45,25 @@ export default function Home() {
       <Navbar onDownload={downloadPDF} className="z-50 relative" />
 
       {/* Hero Section */}
-      <div className="relative z-10 flex flex-col justify-center items-start min-h-screen px-6 md:px-16 pt-36 md:pt-44 max-w-4xl">
-        {/* Available indicator */}
+      <div className="relative z-10 flex flex-col justify-start h-auto pt-28 md:pt-32 px-6 md:px-16 max-w-4xl pb-12">
+
+        {/* Available Indicator */}
         <motion.div
-          className="absolute top-24 inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full backdrop-blur-md shadow-lg font-poppins cursor-pointer"
-          initial={{ opacity: 0, y: -20 }}
+          className="mb-6 w-fit inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1 rounded-full backdrop-blur-md shadow-lg font-poppins"
+          initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7 }}
         >
-          <span className="w-2.5 h-2.5 bg-green-400 rounded-full relative">
+          <span className="w-2 h-2 bg-green-400 rounded-full relative">
             <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
           </span>
-          <p className="text-green-300 text-sm text-center">
+          <p className="text-green-300 text-xs sm:text-sm">
             Available for collaborations
           </p>
         </motion.div>
 
         {/* Heading */}
-        <h1 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl">
+        <h1 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl leading-tight">
           Hey, I am <span className="text-white">Tartor</span>
         </h1>
 
@@ -92,20 +94,21 @@ export default function Home() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           Building modern, responsive web applications with clean design and
-          seamless user experiences, turning ideas into intuitive, fast, and
+          seamless user experiences — turning ideas into intuitive, fast, and
           engaging digital products.
         </motion.p>
 
-        {/* Call to Action Buttons */}
+        {/* CTA Buttons */}
         <motion.div
           className="flex items-center gap-4 mt-6 flex-wrap"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <button className="text-white font-poppins px-6 py-2 rounded-2xl text-lg bg-gray-500/50 hover:bg-gray-500 hover:cursor-pointer border transition">
+          <button className="text-white font-poppins px-6 py-2 rounded-2xl text-lg bg-gray-500/50 hover:bg-gray-500 border transition">
             Hire me
           </button>
+
           <button className="p-3 text-white border border-white text-lg rounded-full hover:bg-white/20 transition">
             <FiMail />
           </button>
