@@ -1,9 +1,8 @@
-// ==================== HOME.JSX ====================
+
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMail } from "react-icons/fi";
 
-// ✅ IMPORT THE PDF FROM SRC/ASSETS
 import resumePDF from "../assets/Tartor-Resume.pdf";
 
 import Navbar from "../components/Navbar";

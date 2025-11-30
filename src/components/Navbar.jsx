@@ -1,5 +1,3 @@
-
-// ==================== NAVBAR.JSX ====================
 import { useState } from "react";
 import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
