@@ -1,6 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+// ==================== HOME.JSX ====================
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMail } from "react-icons/fi";
+
+// ✅ IMPORT THE PDF FROM SRC/ASSETS
+import resumePDF from "../assets/Tartor-Resume.pdf";
 
 import Navbar from "../components/Navbar";
 import About from "./About";
@@ -9,8 +13,6 @@ import Projects from "./Projects";
 import Contact from "./Contact";
 import Footer from "./Footer";
 import AnimatedBackground from "./AnimatedBackground";
-import ResumePreview from "./ResumePreview";
-import { handleDownloadPDF } from "../utils/pdfGenerator";
 
 export default function Home() {
   const roles = [
@@ -21,7 +23,6 @@ export default function Home() {
   ];
 
   const [index, setIndex] = useState(0);
-  const resumeRef = useRef();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -34,15 +35,30 @@ export default function Home() {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const downloadPDF = () => handleDownloadPDF(resumeRef);
+  // ✅ DOWNLOAD FUNCTION USING IMPORTED PDF
+  const handleDownloadResume = () => {
+    try {
+      const link = document.createElement('a');
+      link.href = resumePDF; // Use the imported PDF
+      link.download = 'Tartor_CV.pdf';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Download failed:', error);
+      window.open(resumePDF, '_blank');
+    }
+  };
 
   return (
     <div id="home" className="relative overflow-hidden text-white">
       {/* Animated background */}
       <AnimatedBackground />
 
-      {/* Navbar */}
-      <Navbar onDownload={downloadPDF} className="z-50 relative" />
+      {/* Navbar - PASS THE FUNCTION */}
+      <Navbar onDownload={handleDownloadResume} className="z-50 relative" />
 
       {/* Hero Section */}
       <div className="relative z-10 flex flex-col justify-start h-auto pt-28 md:pt-32 px-6 md:px-16 max-w-4xl pb-12">
@@ -121,20 +137,6 @@ export default function Home() {
       <Projects id="projects" />
       <Contact id="contact" />
       <Footer />
-
-      {/* Hidden ResumePreview for PDF */}
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: "-9999px",
-          width: "210mm",
-          background: "white",
-          zIndex: 999,
-        }}
-      >
-        <ResumePreview ref={resumeRef} />
-      </div>
     </div>
   );
 }

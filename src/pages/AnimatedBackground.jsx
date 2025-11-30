@@ -17,7 +17,7 @@ export default function AnimatedBackground() {
   const [cometY, setCometY] = useState(Math.random() * (window.innerHeight * 0.85));
 
   useEffect(() => {
-    const makeStars = () => (starsRef.current = getStars(400, window.innerWidth, window.innerHeight));
+    const makeStars = () => (starsRef.current = getStars(250, window.innerWidth, window.innerHeight));
     makeStars();
 
     const onResize = () => {

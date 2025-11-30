@@ -1,3 +1,5 @@
+
+// ==================== NAVBAR.JSX ====================
 import { useState } from "react";
 import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
@@ -7,11 +9,19 @@ export default function Navbar({ onDownload }) {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -96; // Adjust for navbar height
+      const yOffset = -96;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
     setOpen(false);
+  };
+
+  const handleDownloadResume = () => {
+    setOpen(false);
+    
+    if (onDownload) {
+      onDownload();
+    }
   };
 
   return (
@@ -41,7 +51,7 @@ export default function Navbar({ onDownload }) {
 
           {/* Download Resume Button */}
           <button
-            onClick={onDownload}
+            onClick={handleDownloadResume}
             className="flex items-center bg-gray-500/70 hover:bg-gray-500 hover:cursor-pointer rounded-2xl px-5 py-2 transition-all duration-300"
           >
             <FiDownload size={20} className="mr-2" />
@@ -79,8 +89,9 @@ export default function Navbar({ onDownload }) {
               </button>
             ))}
 
+            {/* Mobile Download Button */}
             <button
-              onClick={onDownload}
+              onClick={handleDownloadResume}
               className="mt-4 flex items-center justify-center gap-2 bg-gray-500/70 hover:bg-gray-500 rounded-full px-4 py-2 font-semibold transition-all duration-300"
             >
               <FiDownload /> Resume
