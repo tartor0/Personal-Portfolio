@@ -1,174 +1,212 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 
-const getStars = (count, winW, winH) =>
-  Array.from({ length: count }, () => ({
-    x: Math.random() * winW * 1.1 - winW * 0.05,
-    y: Math.random() * winH * 1.1 - winH * 0.05,
-    size: Math.random() * 1.2 + 0.3,
-    opacity: Math.random() * 0.6 + 0.2,
-    twinkleDelay: Math.random() * 2,
-  }));
+// Static configuration to prevent unnecessary recalculations
+const BLOBS_CONFIG = [
+  { color: "#7c27ff", size: 320, top: "18%", left: "6%", speed: 60 },
+  { color: "#7bfdfc", size: 250, top: "65%", left: "82%", speed: 45 },
+  { color: "#f95757", size: 280, top: "53%", left: "33%", speed: 30 },
+  { color: "#ffe680", size: 180, top: "81%", left: "48%", speed: 38 },
+];
 
-export default function AnimatedBackground() {
-  const [win, setWin] = useState({ w: window.innerWidth, h: window.innerHeight });
-  const [mouse, setMouse] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const starsRef = useRef([]);
-  const [cometY, setCometY] = useState(Math.random() * (window.innerHeight * 0.85));
+const MOVING_BLOBS_CONFIG = [
+  { color: "#4a90e2", size: 130, top: "14%", left: "67%", speed: 50 },
+  { color: "#ffe680", size: 110, top: "74%", left: "15%", speed: 45 },
+];
 
-  useEffect(() => {
-    const makeStars = () => (starsRef.current = getStars(250, window.innerWidth, window.innerHeight));
-    makeStars();
+// Generate stars once and memoize
+const generateStars = (count, width, height) => {
+  const stars = [];
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 1.2 + 0.3,
+      opacity: Math.random() * 0.6 + 0.2,
+      twinkleDelay: Math.random() * 2,
+      duration: 1.5 + (i % 5) * 0.3,
+    });
+  }
+  return stars;
+};
 
-    const onResize = () => {
-      setWin({ w: window.innerWidth, h: window.innerHeight });
-      makeStars();
-      setCometY(Math.random() * (window.innerHeight * 0.85));
-    };
-    const onMouse = (e) => setMouse({ x: e.clientX, y: e.clientY });
+export default function OptimizedAnimatedBackground() {
+  const [windowSize, setWindowSize] = useState({ 
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200, 
+    height: typeof window !== 'undefined' ? window.innerHeight : 800 
+  });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [cometY, setCometY] = useState(0);
 
-    window.addEventListener("resize", onResize);
-    window.addEventListener("mousemove", onMouse);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMouse);
-    };
+  // Memoize stars generation
+  const stars = useMemo(() => 
+    generateStars(200, windowSize.width, windowSize.height), // Reduced from 100 to 80
+    [windowSize.width, windowSize.height]
+  );
+
+  // Throttled mouse move handler
+  const handleMouseMove = useCallback((e) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
   }, []);
 
-  const parallaxX = (mouse.x - win.w / 2) / 40;
-  const parallaxY = (mouse.y - win.h / 2) / 40;
+  // Handle resize with debouncing
+  const handleResize = useCallback(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    setCometY(Math.random() * (window.innerHeight * 0.85));
+  }, []);
 
-  const blobs = [
-    { color: "#7c27ff", size: 320, top: "18%", left: "6%", speed: 60 },
-    { color: "#7bfdfc", size: 250, top: "65%", left: "82%", speed: 45 },
-    { color: "#f95757", size: 280, top: "53%", left: "33%", speed: 30 },
-    { color: "#ffe680", size: 180, top: "81%", left: "48%", speed: 38 },
-  ];
+  useEffect(() => {
+    // Initialize comet position
+    setCometY(Math.random() * (windowSize.height * 0.85));
 
-  const movingBlobs = [
-    { color: "#4a90e2", size: 130, top: "14%", left: "67%", speed: 50 },
-    { color: "#ffe680", size: 110, top: "74%", left: "15%", speed: 45 },
-  ];
+    // Use passive events for better performance
+    const options = { passive: true };
+
+    window.addEventListener("mousemove", handleMouseMove, options);
+    window.addEventListener("resize", handleResize, options);
+
+    // Simple debounce for resize
+    let resizeTimer;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleResize, 100);
+    };
+    window.addEventListener("resize", debouncedResize);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", debouncedResize);
+      clearTimeout(resizeTimer);
+    };
+  }, [handleMouseMove, handleResize, windowSize.height]);
+
+  // Calculate parallax with reduced intensity for better performance
+  const parallaxX = (mousePosition.x - windowSize.width / 2) / 60;
+  const parallaxY = (mousePosition.y - windowSize.height / 2) / 60;
 
   return (
     <div className="fixed inset-0 -z-10 bg-black overflow-hidden pointer-events-none select-none">
-      {/* Nebula blobs */}
-      {blobs.map((b, i) => (
+      {/* Optimized Nebula Blobs - Reduced blur and opacity */}
+      {BLOBS_CONFIG.map((blob, i) => (
         <motion.div
-          key={i}
-          className="absolute blur-[120px]"
-          style={{
-            width: b.size,
-            height: b.size,
-            background: b.color,
-            top: b.top,
-            left: b.left,
-            opacity: 0.22,
-          }}
-          animate={{
-            x: [
-              parallaxX * (i % 2 ? 12 : -12),
-              parallaxX * (i % 2 ? 24 : -24),
-              parallaxX * (i % 2 ? 12 : -12),
-            ],
-            y: [
-              parallaxY * (i % 2 ? 8 : -8),
-              parallaxY * (i % 2 ? 20 : -20),
-              parallaxY * (i % 2 ? 8 : -8),
-            ],
-            scale: [1, 1.08, 1],
-            rotate: [0, 20, 0],
-          }}
-          transition={{
-            duration: b.speed,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Small moving blobs */}
-      {movingBlobs.map((blob, i) => (
-        <motion.div
-          key={i}
-          className="absolute blur-[120px]"
+          key={`blob-${i}`}
+          className="absolute"
           style={{
             width: blob.size,
             height: blob.size,
             background: blob.color,
             top: blob.top,
             left: blob.left,
-            opacity: 0.15,
+            opacity: 0.18, // Reduced opacity
+            filter: "blur(80px)", // Reduced blur
+            willChange: "transform", // Hint for GPU acceleration
           }}
           animate={{
-            x: [0, 18 * (i === 0 ? 1 : -1), 0],
-            y: [0, 13 * (i === 0 ? 1 : -1), 0],
-            scale: [1, 1.11, 1],
-            rotate: [0, 10, 0],
+            x: parallaxX * (i % 2 ? 0.8 : -0.8),
+            y: parallaxY * (i % 2 ? 0.6 : -0.6),
+            scale: [1, 1.04, 1],
           }}
           transition={{
             duration: blob.speed,
             repeat: Infinity,
             ease: "easeInOut",
+            type: "tween",
           }}
         />
       ))}
 
-      {/* Stars */}
-      {starsRef.current.map((s, i) => (
+      {/* Optimized Moving Blobs - Simplified animation */}
+      {MOVING_BLOBS_CONFIG.map((blob, i) => (
         <motion.div
-          key={i}
-          className="absolute bg-white rounded-full"
+          key={`moving-${i}`}
+          className="absolute"
           style={{
-            left: s.x,
-            top: s.y,
-            width: s.size,
-            height: s.size,
-            opacity: s.opacity,
-            boxShadow: `0 0 8px 0 #fff8`,
+            width: blob.size,
+            height: blob.size,
+            background: blob.color,
+            top: blob.top,
+            left: blob.left,
+            opacity: 0.12,
+            filter: "blur(80px)",
+            willChange: "transform",
           }}
           animate={{
-            opacity: [s.opacity, s.opacity * 1.3, s.opacity],
-            scale: [1, 1.25, 1],
+            x: [0, 12 * (i === 0 ? 1 : -1)],
+            y: [0, 8 * (i === 0 ? 1 : -1)],
+            scale: [1, 1.06],
           }}
           transition={{
-            duration: 1.5 + (i % 5) * 0.3,
+            duration: blob.speed,
             repeat: Infinity,
-            delay: s.twinkleDelay,
+            repeatType: "reverse",
             ease: "easeInOut",
           }}
         />
       ))}
 
-      {/* Random Slim Comet with Fading Trail */}
+      {/* Optimized Stars - Using CSS transforms for better performance */}
+      {stars.map((star, i) => (
+        <motion.div
+          key={`star-${i}`}
+          className="absolute bg-white rounded-full"
+          style={{
+            left: star.x,
+            top: star.y,
+            width: star.size,
+            height: star.size,
+            opacity: star.opacity,
+            boxShadow: "0 0 4px #fff",
+            willChange: "transform, opacity",
+            transform: "translateZ(0)", // GPU acceleration hint
+          }}
+          animate={{
+            opacity: [star.opacity, star.opacity * 1.2, star.opacity],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.twinkleDelay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Optimized Comet - Using simpler trail and reduced effects */}
       <motion.div
-        className="absolute rounded-full"
+        className="absolute"
         style={{
           top: cometY,
-          left: -win.w * 0.1,
-          width: win.w * 0.4,      // shorter comet
-          height: 1.5,             // slim comet
-          background: "linear-gradient(90deg, rgba(255,255,255,0.95) 0%, #61dafb 40%, rgba(255,255,255,0) 100%)",
-          boxShadow: "0 0 60px 6px #61dafb77",
-          borderRadius: 999,
+          left: 0,
+          width: "40vw",
+          height: 1,
+          background: "linear-gradient(90deg, transparent, #61dafb, transparent)",
+          filter: "blur(0.5px)",
+          willChange: "transform",
         }}
-        initial={{ x: 0, opacity: 0 }}
+        initial={{ x: "-40vw", opacity: 0 }}
         animate={{
-          x: [0, win.w + win.w * 0.15],
-          opacity: [0, 1, 0.7, 0],
-          rotate: [-1.5, 0, 1.5],
+          x: ["-40vw", "140vw"],
+          opacity: [0, 0.8, 0],
         }}
         transition={{
-          duration: 6, // faster
+          duration: 4,
           ease: "linear",
           repeat: Infinity,
-          repeatDelay: 1,
+          repeatDelay: 2,
         }}
-        onUpdate={(latest) => {
-          if (latest.x >= win.w + win.w * 0.15) {
-            // pick a new random vertical position for next pass
-            setCometY(Math.random() * (win.h * 0.85));
-          }
+        onAnimationComplete={() => {
+          setCometY(Math.random() * (windowSize.height * 0.85));
+        }}
+      />
+      
+      {/* Subtle gradient overlay for depth */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(circle at 20% 30%, transparent 0%, rgba(0, 0, 0, 0.7) 70%)",
+          pointerEvents: "none",
         }}
       />
     </div>
