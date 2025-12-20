@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiMail } from "react-icons/fi";
+import { FiMail, FiArrowRight } from "react-icons/fi";
 
 import resumePDF from "../assets/Tartor-Resume.pdf";
 
@@ -34,11 +33,10 @@ export default function Home() {
     window.scrollTo({ top: 0 });
   }, []);
 
-  // ✅ DOWNLOAD FUNCTION USING IMPORTED PDF
   const handleDownloadResume = () => {
     try {
       const link = document.createElement('a');
-      link.href = resumePDF; // Use the imported PDF
+      link.href = resumePDF;
       link.download = 'Tartor_CV.pdf';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
@@ -52,82 +50,94 @@ export default function Home() {
   };
 
   return (
-    <div id="home" className="relative overflow-hidden text-white">
-      {/* Animated background */}
+    <div id="home" className="relative overflow-hidden text-black">
       <AnimatedBackground />
+      <style>
+        {`
+          @import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+          
+          * {
+            font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+          }
+        `}
+      </style>
 
-      {/* Navbar - PASS THE FUNCTION */}
       <Navbar onDownload={handleDownloadResume} className="z-50 relative" />
 
-      {/* Hero Section */}
-      <div className="relative z-10 flex flex-col justify-start h-auto pt-28 md:pt-32 px-6 md:px-16 max-w-4xl pb-12">
+      {/* Hero Section - Centered & Minimal */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-6 md:px-12">
+        <div className="max-w-3xl w-full space-y-8">
 
-        {/* Available Indicator */}
-        <motion.div
-          className="mb-6 w-fit inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1 rounded-full backdrop-blur-md shadow-lg font-poppins"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <span className="w-2 h-2 bg-green-400 rounded-full relative">
-            <span className="absolute inset-0 w-full h-full rounded-full bg-green-400 animate-ping"></span>
-          </span>
-          <p className="text-green-300 text-xs sm:text-sm">
+          {/* Available Badge with green background */}
+          <motion.div
+            className="inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full text-sm text-green-700 font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
             Available for collaborations
-          </p>
-        </motion.div>
+          </motion.div>
 
-        {/* Heading */}
-        <h1 className="text-gray-400 font-poppins text-3xl sm:text-4xl md:text-5xl leading-tight">
-          Hey, I am <span className="text-white">Tartor</span>
-        </h1>
+          {/* Name */}
+          <motion.h1 
+            className="text-5xl md:text-7xl font-medium tracking-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Tartor
+          </motion.h1>
 
-        {/* Role Animation */}
-        <h2 className="text-xl sm:text-3xl md:text-[55px] mt-3 text-gray-300 font-poppins flex flex-wrap items-center gap-2 leading-tight">
-          A{" "}
-          <span className="h-[45px] sm:h-[55px] flex items-center">
+          {/* Role Animation */}
+          <motion.div
+            className="text-2xl md:text-4xl text-gray-600 font-normal flex items-center gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <AnimatePresence mode="wait">
               <motion.span
                 key={roles[index]}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="text-white font-semibold"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="text-black font-medium"
               >
                 {roles[index]}
               </motion.span>
             </AnimatePresence>
-          </span>
-        </h2>
+          </motion.div>
 
-        {/* Description */}
-        <motion.p
-          className="mt-4 text-gray-300 text-base md:text-lg font-poppins leading-relaxed max-w-lg backdrop-blur-md bg-white/10 p-4 md:p-6 rounded-2xl shadow-lg"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          Building modern, responsive web applications with clean design and
-          seamless user experiences — turning ideas into intuitive, fast, and
-          engaging digital products.
-        </motion.p>
+          {/* Description */}
+          <motion.p
+            className="text-lg text-gray-600 font-normal max-w-xl leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            Building modern web applications with clean design and seamless user experiences.
+          </motion.p>
 
-        {/* CTA Buttons */}
-        <motion.div
-          className="flex items-center gap-4 mt-6 flex-wrap"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <button className="text-white font-poppins px-6 py-2 rounded-2xl text-lg bg-gray-500/50 hover:bg-gray-500 border transition">
-            Hire me
-          </button>
+          {/* CTA Buttons */}
+          <motion.div
+            className="flex items-center gap-4 pt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <button className="group flex items-center gap-2 text-black px-6 py-3 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-all font-medium">
+              <span>Get in touch</span>
+              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </button>
 
-          <button className="p-3 text-white border border-white text-lg rounded-full hover:bg-white/20 transition">
-            <FiMail />
-          </button>
-        </motion.div>
+            <button className="p-3 text-black border border-black/20 rounded-full hover:border-black/40 hover:bg-black/5 transition-all">
+              <FiMail />
+            </button>
+          </motion.div>
+
+        </div>
       </div>
 
       {/* Sections */}

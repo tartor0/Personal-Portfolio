@@ -19,7 +19,6 @@ export default function Projects() {
       category: "backend",
       link: "https://github.com/tartor0/Dungeon-Crawler",
       tags: ["JavaFX", "Game Dev", "OOP"],
-      gradient: "from-red-500/20 to-orange-500/20",
       icon: FaCode,
     },
     {
@@ -29,7 +28,6 @@ export default function Projects() {
       category: "backend",
       link: "https://github.com/tartor0/task_management_system",
       tags: ["Spring Boot", "PostgreSQL", "REST API"],
-      gradient: "from-green-500/20 to-emerald-500/20",
       icon: FaServer,
     },
     {
@@ -39,7 +37,6 @@ export default function Projects() {
       category: "frontend",
       link: "https://github.com/tartor0/Property_management_system-FrontEnd",
       tags: ["React", "Tailwind", "UI/UX"],
-      gradient: "from-blue-500/20 to-cyan-500/20",
       icon: FaCode,
     },
     {
@@ -49,7 +46,6 @@ export default function Projects() {
       category: "backend",
       link: "https://github.com/tartor0/Property_management_system-BackEnd",
       tags: ["Spring Boot", "MySQL", "Security"],
-      gradient: "from-purple-500/20 to-pink-500/20",
       icon: FaServer,
     },
     {
@@ -59,7 +55,6 @@ export default function Projects() {
       category: "fullstack",
       link: "https://github.com/tartor0/Tartors-Goodies",
       tags: ["React", "Spring Boot", "E-commerce"],
-      gradient: "from-yellow-500/20 to-orange-500/20",
       icon: FaLayerGroup,
     },
   ];
@@ -77,51 +72,40 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="w-full py-20 px-4 md:px-10 font-poppins-med text-white relative"
+      className="w-full py-20 px-4 md:px-10 text-black"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="mb-20"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            Projects
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Explore some of the works I've built — from games to fullstack apps
-          </p>
+          <h2 className="text-5xl md:text-6xl font-medium mb-2">Projects</h2>
+          <div className="w-20 h-1 bg-black"></div>
         </motion.div>
 
         {/* Filter Buttons */}
-        <div className="flex justify-center flex-wrap gap-4 mb-12">
+        <div className="flex justify-start flex-wrap gap-3 mb-16">
           {filterButtons.map((btn, idx) => (
             <motion.button
               key={btn.value}
               onClick={() => setFilter(btn.value)}
-              className={`relative flex items-center gap-3 px-6 py-3 rounded-2xl font-semibold transition-all duration-300 overflow-hidden group ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all text-sm ${
                 filter === btn.value
-                  ? "bg-white/20 text-white shadow-2xl scale-105"
-                  : "bg-white/5 text-gray-300 backdrop-blur-md hover:bg-white/10"
+                  ? "bg-black text-white"
+                  : "bg-black/5 text-black hover:bg-black/10"
               }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
             >
-              {filter === btn.value && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-transparent"
-                  layoutId="activeFilter"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-              <btn.icon className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">{btn.label}</span>
+              <btn.icon className="w-4 h-4" />
+              <span>{btn.label}</span>
             </motion.button>
           ))}
         </div>
@@ -135,32 +119,29 @@ export default function Projects() {
             <motion.div
               key={project.title}
               layout
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group relative"
+              whileHover={{ y: -8 }}
+              className="group"
             >
-              {/* Glow effect on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-500 rounded-3xl`} />
-
               {/* Card */}
-              <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-xl group-hover:border-white/30 transition-all duration-300 flex flex-col">
+              <div className="h-full border border-black/10 rounded-2xl p-6 hover:border-black/30 transition-all flex flex-col">
                 
                 {/* Icon Badge */}
-                <div className={`inline-flex w-fit p-3 rounded-2xl bg-gradient-to-br ${project.gradient} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <project.icon className="text-white w-6 h-6" />
+                <div className="inline-flex w-fit p-3 rounded-xl bg-black/5 mb-4 group-hover:bg-black/10 transition-all">
+                  <project.icon className="text-black w-5 h-5" />
                 </div>
 
                 {/* Title & Subtitle */}
-                <h2 className="text-2xl font-bold mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
+                <h3 className="text-xl font-semibold mb-1">
                   {project.title}
-                </h2>
-                <p className="text-gray-400 text-sm mb-3">{project.subtitle}</p>
+                </h3>
+                <p className="text-gray-500 text-sm mb-3 font-normal">{project.subtitle}</p>
 
                 {/* Description */}
-                <p className="text-gray-300 text-sm leading-relaxed mb-4 flex-grow">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow font-normal">
                   {project.description}
                 </p>
 
@@ -169,18 +150,11 @@ export default function Projects() {
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs px-3 py-1 rounded-full bg-white/10 border border-white/20 text-gray-300"
+                      className="text-xs px-3 py-1 rounded-full bg-black/5 text-gray-700 font-medium"
                     >
                       {tag}
                     </span>
                   ))}
-                </div>
-
-                {/* Category Badge */}
-                <div className="mb-4">
-                  <span className="text-xs px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 font-semibold uppercase tracking-wide">
-                    {project.category}
-                  </span>
                 </div>
 
                 {/* Action Buttons */}
@@ -189,21 +163,21 @@ export default function Projects() {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm font-semibold hover:bg-white/20 transition-all duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-black/20 rounded-full text-sm font-medium hover:bg-black/5 transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <FaGithub className="w-4 h-4" /> GitHub
+                    <FaGithub className="w-4 h-4" /> Code
                   </motion.a>
                   <motion.a
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl text-sm font-semibold hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-black text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-all"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <FaExternalLinkAlt className="w-4 h-4" /> View
+                    <FaExternalLinkAlt className="w-3 h-3" /> View
                   </motion.a>
                 </div>
               </div>
@@ -218,26 +192,26 @@ export default function Projects() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <p className="text-gray-400 text-lg">No projects found in this category.</p>
+            <p className="text-gray-500 font-normal">No projects found in this category.</p>
           </motion.div>
         )}
 
         {/* Bottom CTA */}
         <motion.div
-          className="mt-16 text-center"
+          className="mt-20 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
-          <p className="text-gray-400 text-lg mb-4">
+          <p className="text-gray-600 mb-4 font-normal">
             Want to see more? Check out my GitHub!
           </p>
           <motion.a
             href="https://github.com/tartor0"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 border border-white/20 rounded-2xl font-semibold hover:bg-white/20 transition-all duration-300"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-black/20 rounded-full font-medium hover:bg-black/5 transition-all"
             whileHover={{ scale: 1.05, y: -3 }}
             whileTap={{ scale: 0.95 }}
           >

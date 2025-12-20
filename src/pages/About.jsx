@@ -39,7 +39,6 @@ export default function About({ id, className = "" }) {
     });
   };
 
-  // Stats with animation
   const stats = [
     { number: "2+", label: "Years Experience", icon: FaCode },
     { number: "15+", label: "Projects Built", icon: FaRocket },
@@ -49,187 +48,141 @@ export default function About({ id, className = "" }) {
   return (
     <section
       id={id}
-      className={`${className} font-poppins-med min-h-screen mt-28 text-white relative z-10 px-4 sm:px-6 md:px-10 lg:px-16`}
+      className={`${className} min-h-screen py-20 text-black px-6 md:px-60`}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="mb-20"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            About me
-          </h2>
+          <h2 className="text-5xl md:text-6xl font-medium mb-2">About</h2>
+          <div className="w-20 h-1 bg-black"></div>
         </motion.div>
 
-        {/* Main Content - Bento Grid Style */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           
-          {/* Profile Image Card - Large */}
+          {/* Left - Image */}
           <motion.div
-            className="lg:col-span-5 relative group"
+            className="flex justify-center lg:justify-start"
             data-aos="fade-right"
-            whileHover={{ scale: 1.02 }}
           >
-            <div className="relative bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-cyan-500/20 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl overflow-hidden h-full">
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative z-10 flex flex-col items-center justify-center h-full gap-6">
-                <motion.div
-                  className="relative"
-                  whileHover={{ scale: 1.05, rotate: 3 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-full blur-xl opacity-50 animate-pulse" />
-                  <img
-                    src={PersonalImage}
-                    alt="Tartor"
-                    className="relative rounded-full w-64 h-64 object-cover shadow-2xl border-4 border-white/20"
-                  />
-                </motion.div>
-                
-                <div className="text-center">
-                  <h3 className="text-3xl font-bold mb-2">Tartor Gaadi</h3>
-                  <p className="text-gray-300 flex items-center justify-center gap-2">
-                    <FaMapMarkerAlt className="text-pink-400" />
-                    Port Harcourt, Nigeria
-                  </p>
-                </div>
+            <div className="relative">
+              <img
+                src={PersonalImage}
+                alt="Tartor"
+                className="rounded-2xl w-80 h-80 object-cover border border-black/10"
+              />
+              <div className="absolute -bottom-4 -right-4 bg-black text-white px-6 py-3 rounded-full">
+                <p className="text-sm font-medium flex items-center gap-2">
+                  <FaMapMarkerAlt />
+                  Port Harcourt, NG
+                </p>
               </div>
             </div>
           </motion.div>
 
-          {/* Right Side - Stats & Cards */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            
-            {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat, idx) => (
-                <motion.div
-                  key={idx}
-                  className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-purple-500/50 transition-all duration-300 group"
-                  data-aos="fade-up"
-                  data-aos-delay={idx * 100}
-                  whileHover={{ y: -5 }}
-                >
-                  <stat.icon className="text-gray-300 w-8 h-8 mb-3 group-hover:scale-110 transition-transform" />
-                  <h4 className="text-3xl font-bold mb-1">{stat.number}</h4>
-                  <p className="text-gray-400 text-sm">{stat.label}</p>
-                </motion.div>
-              ))}
+          {/* Right - Info */}
+          <motion.div
+            className="space-y-8"
+            data-aos="fade-left"
+          >
+            <div>
+              <h3 className="text-3xl font-semibold mb-4">Tartor Gaadi</h3>
+              <p className="text-gray-600 text-lg leading-relaxed font-normal">
+                A passionate fullstack developer who loves building clean, modern, and scalable web applications. 
+                I turn ideas into reality through code.
+              </p>
             </div>
 
-            {/* Who Am I Card */}
-            <motion.div
-              className="bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-transparent backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-xl"
-              data-aos="fade-up"
-              whileHover={{ scale: 1.01 }}
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 bg-white/10 rounded-xl">
-                  <FaUser className="text-gray-300 w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-2xl mb-3">Who Am I</h3>
-                  <p className="text-gray-300 leading-relaxed">
-                    A passionate fullstack developer who loves building clean, modern, and scalable web applications. 
-                    I turn caffeine into code and ideas into reality! ☕️✨
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            <div>
+              <h4 className="text-xl font-semibold mb-3 flex items-center gap-2">
+                <FaLightbulb className="text-gray-400" />
+                My Approach
+              </h4>
+              <p className="text-gray-600 leading-relaxed font-normal">
+                Focused on intuitive UI, smooth UX, and writing maintainable code that scales. 
+                Every pixel matters, every interaction counts.
+              </p>
+            </div>
+          </motion.div>
+        </div>
 
-            {/* My Approach Card */}
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {stats.map((stat, idx) => (
             <motion.div
-              className="bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-transparent backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-xl"
+              key={idx}
+              className="text-center p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
               data-aos="fade-up"
-              data-aos-delay="100"
-              whileHover={{ scale: 1.01 }}
+              data-aos-delay={idx * 100}
+              whileHover={{ y: -5 }}
             >
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-white/10 rounded-xl">
-                  <FaLightbulb className="text-gray-300 w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-2xl mb-3">My Approach</h3>
-                  <p className="text-gray-300 leading-relaxed">
-                    Focused on intuitive UI, smooth UX, and writing maintainable code that scales. 
-                    Every pixel matters, every interaction counts.
-                  </p>
-                </div>
-              </div>
+              <stat.icon className="text-gray-400 w-8 h-8 mb-3 mx-auto" />
+              <h4 className="text-4xl font-semibold mb-2">{stat.number}</h4>
+              <p className="text-gray-500 font-normal">{stat.label}</p>
             </motion.div>
-          </div>
+          ))}
+        </div>
 
-          {/* Contact Cards - Full Width */}
+        {/* Contact Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Email */}
           <motion.div
-            className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="p-8 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
             data-aos="fade-up"
-            data-aos-delay="200"
+            whileHover={{ y: -5 }}
           >
-            {/* Email Card */}
-            <motion.div
-              className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-xl group hover:border-pink-500/50 transition-all duration-300"
-              whileHover={{ scale: 1.02, y: -5 }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-pink-500/20 rounded-2xl group-hover:bg-pink-500/30 transition-colors">
-                    <FaEnvelope className="text-pink-400 w-7 h-7" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">Email Address</p>
-                    <p className="font-medium text-gray-200 text-sm break-all">{email}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleCopyEmail}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    copied
-                      ? "bg-green-500/20 text-green-300 border border-green-500/30"
-                      : "bg-white/10 text-white hover:bg-white/20 border border-white/10"
-                  }`}
-                >
-                  {copied ? "✓ Copied!" : "Copy"}
-                </button>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <FaEnvelope className="text-gray-400 w-6 h-6" />
+                <span className="text-sm text-gray-500 font-normal">Email</span>
               </div>
-            </motion.div>
+              <button
+                onClick={handleCopyEmail}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  copied
+                    ? "bg-green-100 text-green-700"
+                    : "bg-black/5 hover:bg-black/10"
+                }`}
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <p className="text-black font-normal break-all">{email}</p>
+          </motion.div>
 
-            {/* WhatsApp Card */}
-            <motion.div
-              className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-xl group hover:border-green-500/50 transition-all duration-300"
-              whileHover={{ scale: 1.02, y: -5 }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-green-500/20 rounded-2xl group-hover:bg-green-500/30 transition-colors">
-                    <FaWhatsapp className="text-green-400 w-7 h-7" />
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-sm mb-1">WhatsApp</p>
-                    <p className="font-medium text-gray-200">{whatsapp}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleCopyWhatsapp}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    copiedWhatsapp
-                      ? "bg-green-500/20 text-green-300 border border-green-500/30"
-                      : "bg-white/10 text-white hover:bg-white/20 border border-white/10"
-                  }`}
-                >
-                  {copiedWhatsapp ? "✓ Copied!" : "Copy"}
-                </button>
+          {/* WhatsApp */}
+          <motion.div
+            className="p-8 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
+            data-aos="fade-up"
+            data-aos-delay="100"
+            whileHover={{ y: -5 }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <FaWhatsapp className="text-gray-400 w-6 h-6" />
+                <span className="text-sm text-gray-500 font-normal">WhatsApp</span>
               </div>
-            </motion.div>
+              <button
+                onClick={handleCopyWhatsapp}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  copiedWhatsapp
+                    ? "bg-green-100 text-green-700"
+                    : "bg-black/5 hover:bg-black/10"
+                }`}
+              >
+                {copiedWhatsapp ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <p className="text-black font-normal">{whatsapp}</p>
           </motion.div>
         </div>
       </div>
     </section>
   );
 }
-

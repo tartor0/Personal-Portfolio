@@ -1,214 +1,119 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
-// Static configuration to prevent unnecessary recalculations
-const BLOBS_CONFIG = [
-  { color: "#7c27ff", size: 320, top: "18%", left: "6%", speed: 60 },
-  { color: "#7bfdfc", size: 250, top: "65%", left: "82%", speed: 45 },
-  { color: "#f95757", size: 280, top: "53%", left: "33%", speed: 30 },
-  { color: "#ffe680", size: 180, top: "81%", left: "48%", speed: 38 },
-];
-
-const MOVING_BLOBS_CONFIG = [
-  { color: "#4a90e2", size: 130, top: "14%", left: "67%", speed: 50 },
-  { color: "#ffe680", size: 110, top: "74%", left: "15%", speed: 45 },
-];
-
-// Generate stars once and memoize
-const generateStars = (count, width, height) => {
-  const stars = [];
-  for (let i = 0; i < count; i++) {
-    stars.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 1.2 + 0.3,
-      opacity: Math.random() * 0.6 + 0.2,
-      twinkleDelay: Math.random() * 2,
-      duration: 1.5 + (i % 5) * 0.3,
-    });
-  }
-  return stars;
-};
-
-export default function OptimizedAnimatedBackground() {
-  const [windowSize, setWindowSize] = useState({ 
-    width: typeof window !== 'undefined' ? window.innerWidth : 1200, 
-    height: typeof window !== 'undefined' ? window.innerHeight : 800 
-  });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [cometY, setCometY] = useState(0);
-
-  // Memoize stars generation
-  const stars = useMemo(() => 
-    generateStars(200, windowSize.width, windowSize.height), // Reduced from 100 to 80
-    [windowSize.width, windowSize.height]
-  );
-
-  // Throttled mouse move handler
-  const handleMouseMove = useCallback((e) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  }, []);
-
-  // Handle resize with debouncing
-  const handleResize = useCallback(() => {
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    setCometY(Math.random() * (window.innerHeight * 0.85));
-  }, []);
+export default function AnimatedBackground() {
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    // Initialize comet position
-    setCometY(Math.random() * (windowSize.height * 0.85));
+    if (!containerRef.current) return;
 
-    // Use passive events for better performance
-    const options = { passive: true };
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 5, 10);
+    camera.lookAt(0, 0, 0);
 
-    window.addEventListener("mousemove", handleMouseMove, options);
-    window.addEventListener("resize", handleResize, options);
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true, 
+      alpha: true 
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    containerRef.current.appendChild(renderer.domElement);
 
-    // Simple debounce for resize
-    let resizeTimer;
-    const debouncedResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(handleResize, 100);
+    // Create grid
+    const gridSize = 50;
+    const gridDivisions = 50;
+    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x000000, 0x999999);
+    gridHelper.material.opacity = 0.15;
+    gridHelper.material.transparent = true;
+    scene.add(gridHelper);
+
+    // Create floating particles on grid intersections
+    const particles = [];
+    const particleGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+    const particleMaterial = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: 0.3,
+    });
+
+    // Add random particles
+    for (let i = 0; i < 30; i++) {
+      const particle = new THREE.Mesh(particleGeometry, particleMaterial.clone());
+      particle.position.x = (Math.random() - 0.5) * gridSize;
+      particle.position.y = Math.random() * 3;
+      particle.position.z = (Math.random() - 0.5) * gridSize;
+      
+      scene.add(particle);
+      particles.push({
+        mesh: particle,
+        speed: Math.random() * 0.02 + 0.01,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    // Add subtle fog
+    scene.fog = new THREE.Fog(0xffffff, 10, 50);
+
+    // Animation
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+
+      // Animate particles
+      particles.forEach((particle) => {
+        particle.mesh.position.y = Math.sin(time * particle.speed + particle.phase) * 2 + 1;
+      });
+
+      // Subtle camera movement
+      camera.position.x = Math.sin(time * 0.1) * 3;
+      camera.position.z = 10 + Math.cos(time * 0.1) * 2;
+      camera.lookAt(0, 0, 0);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     };
-    window.addEventListener("resize", debouncedResize);
+    window.addEventListener('resize', handleResize);
 
+    // Cleanup
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("resize", debouncedResize);
-      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
+      if (containerRef.current) {
+        containerRef.current.removeChild(renderer.domElement);
+      }
+      particleGeometry.dispose();
+      particleMaterial.dispose();
+      particles.forEach(p => p.mesh.material.dispose());
+      renderer.dispose();
     };
-  }, [handleMouseMove, handleResize, windowSize.height]);
-
-  // Calculate parallax with reduced intensity for better performance
-  const parallaxX = (mousePosition.x - windowSize.width / 2) / 60;
-  const parallaxY = (mousePosition.y - windowSize.height / 2) / 60;
+  }, []);
 
   return (
-    <div className="fixed inset-0 -z-10 bg-black overflow-hidden pointer-events-none select-none">
-      {/* Optimized Nebula Blobs - Reduced blur and opacity */}
-      {BLOBS_CONFIG.map((blob, i) => (
-        <motion.div
-          key={`blob-${i}`}
-          className="absolute"
-          style={{
-            width: blob.size,
-            height: blob.size,
-            background: blob.color,
-            top: blob.top,
-            left: blob.left,
-            opacity: 0.18, // Reduced opacity
-            filter: "blur(80px)", // Reduced blur
-            willChange: "transform", // Hint for GPU acceleration
-          }}
-          animate={{
-            x: parallaxX * (i % 2 ? 0.8 : -0.8),
-            y: parallaxY * (i % 2 ? 0.6 : -0.6),
-            scale: [1, 1.04, 1],
-          }}
-          transition={{
-            duration: blob.speed,
-            repeat: Infinity,
-            ease: "easeInOut",
-            type: "tween",
-          }}
-        />
-      ))}
-
-      {/* Optimized Moving Blobs - Simplified animation */}
-      {MOVING_BLOBS_CONFIG.map((blob, i) => (
-        <motion.div
-          key={`moving-${i}`}
-          className="absolute"
-          style={{
-            width: blob.size,
-            height: blob.size,
-            background: blob.color,
-            top: blob.top,
-            left: blob.left,
-            opacity: 0.12,
-            filter: "blur(80px)",
-            willChange: "transform",
-          }}
-          animate={{
-            x: [0, 12 * (i === 0 ? 1 : -1)],
-            y: [0, 8 * (i === 0 ? 1 : -1)],
-            scale: [1, 1.06],
-          }}
-          transition={{
-            duration: blob.speed,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Optimized Stars - Using CSS transforms for better performance */}
-      {stars.map((star, i) => (
-        <motion.div
-          key={`star-${i}`}
-          className="absolute bg-white rounded-full"
-          style={{
-            left: star.x,
-            top: star.y,
-            width: star.size,
-            height: star.size,
-            opacity: star.opacity,
-            boxShadow: "0 0 4px #fff",
-            willChange: "transform, opacity",
-            transform: "translateZ(0)", // GPU acceleration hint
-          }}
-          animate={{
-            opacity: [star.opacity, star.opacity * 1.2, star.opacity],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: star.duration,
-            repeat: Infinity,
-            delay: star.twinkleDelay,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Optimized Comet - Using simpler trail and reduced effects */}
-      <motion.div
-        className="absolute"
-        style={{
-          top: cometY,
-          left: 0,
-          width: "40vw",
-          height: 1,
-          background: "linear-gradient(90deg, transparent, #61dafb, transparent)",
-          filter: "blur(0.5px)",
-          willChange: "transform",
-        }}
-        initial={{ x: "-40vw", opacity: 0 }}
-        animate={{
-          x: ["-40vw", "140vw"],
-          opacity: [0, 0.8, 0],
-        }}
-        transition={{
-          duration: 4,
-          ease: "linear",
-          repeat: Infinity,
-          repeatDelay: 2,
-        }}
-        onAnimationComplete={() => {
-          setCometY(Math.random() * (windowSize.height * 0.85));
-        }}
-      />
-      
-      {/* Subtle gradient overlay for depth */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: "radial-gradient(circle at 20% 30%, transparent 0%, rgba(0, 0, 0, 0.7) 70%)",
-          pointerEvents: "none",
-        }}
-      />
-    </div>
+    <div
+      ref={containerRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+        pointerEvents: 'none',
+      }}
+    />
   );
 }

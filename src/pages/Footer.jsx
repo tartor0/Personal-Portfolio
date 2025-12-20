@@ -3,19 +3,16 @@ import {
   FaLinkedin,
   FaInstagram,
   FaTwitter,
-  FaHome,
-  FaTools,
-  FaProjectDiagram,
-  FaEnvelope,
 } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 
 export default function Footer() {
   const navigation = [
-    { name: "Home", href: "#home", icon: <FaHome /> },
-    { name: "Skills", href: "#skills", icon: <FaTools /> },
-    { name: "Projects", href: "#projects", icon: <FaProjectDiagram /> },
-    { name: "Contact", href: "#contact", icon: <FaEnvelope /> },
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Skills", href: "#skills" },
+    { name: "Projects", href: "#projects" },
+    { name: "Contact", href: "#contact" },
   ];
 
   const socials = [
@@ -26,46 +23,46 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full py-16 px-6 font-poppins-med relative z-10">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-10">
-        {/* ABOUT ME */}
-        <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg md:border-r md:border-gray-700">
-          <h2 className="text-2xl font-semibold mb-2">Tartor Gaadi</h2>
-          <p className="text-gray-300">Full-Stack Developer</p>
-        </div>
+    <footer className="w-full py-16 px-6 bg-white border-t border-black/10">
+      <div className="max-w-6xl mx-auto">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          {/* ABOUT ME */}
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">Tartor Gaadi</h2>
+            <p className="text-gray-600 font-normal">Full-Stack Developer</p>
+          </div>
 
-        {/* NAVIGATION */}
-        <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg md:border-r md:border-gray-700">
-          <h3 className="text-xl font-semibold mb-3">Navigation</h3>
-          <ul className="grid grid-cols-2 gap-2 text-gray-300">
-            {navigation.map((item) => (
-              <li key={item.name}>
-                <a
-                  href={item.href}
-                  className="hover:text-white/80 inline-flex items-center gap-2 w-max transition-colors"
-                >
-                  {item.icon} {item.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {/* NAVIGATION */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2 text-gray-600">
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <a
+                    href={item.href}
+                    className="hover:text-black transition-colors font-normal"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* SOCIALS + SUBSCRIBE */}
-        <div className="flex flex-col gap-8">
           {/* SOCIALS */}
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-3">Find Me Online</h3>
-            <ul className="grid grid-cols-2 gap-3 text-gray-300 text-lg">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Connect</h3>
+            <ul className="space-y-2 text-gray-600">
               {socials.map((social) => (
                 <li key={social.name}>
                   <a
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 hover:text-white/80 transition-colors"
+                    className="flex items-center gap-2 hover:text-black transition-colors font-normal"
                   >
-                    <social.icon /> {social.name}
+                    <social.icon className="w-4 h-4" /> {social.name}
                   </a>
                 </li>
               ))}
@@ -73,31 +70,31 @@ export default function Footer() {
           </div>
 
           {/* SUBSCRIBE */}
-          <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg">
-            <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-              <FiSend /> Subscribe to Newsletter
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <FiSend className="w-4 h-4" /> Newsletter
             </h3>
-            <p className="text-gray-300 mb-4">
-              Stay updated with my latest projects and articles.
+            <p className="text-gray-600 mb-4 text-sm font-normal">
+              Stay updated with my latest projects
             </p>
 
-            <div className="flex w-full rounded-full overflow-hidden border border-white/20">
+            <div className="flex rounded-full overflow-hidden border border-black/10">
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-transparent text-white outline-none min-w-0"
+                placeholder="Your email"
+                className="flex-1 px-4 py-2 bg-white text-black outline-none text-sm font-normal min-w-0"
               />
-              <button className="flex-shrink-0 w-12 bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
-                <FiSend className="w-5 h-5" />
+              <button className="flex-shrink-0 px-4 bg-black text-white hover:bg-gray-800 flex items-center justify-center transition">
+                <FiSend className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* COPYRIGHT */}
-      <div className="text-center text-gray-400 mt-16 text-sm">
-        © {new Date().getFullYear()} Tartor Gaadi. All rights reserved.
+        {/* COPYRIGHT */}
+        <div className="text-center text-gray-500 pt-8 border-t border-black/10 text-sm font-normal">
+          © {new Date().getFullYear()} Tartor Gaadi. All rights reserved.
+        </div>
       </div>
     </footer>
   );
