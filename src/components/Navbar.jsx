@@ -55,7 +55,7 @@ export default function Navbar({ onDownload }) {
 
   return (
     <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-4xl">
-      <div className="bg-white/20 backdrop-blur-sm border border-black/10 rounded-3xl shadow-lg px-3 py-2">
+      <div className="bg-white border border-black/10 rounded-3xl shadow-lg px-3 py-2">
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-2">
           {/* Home Icon with highlight */}

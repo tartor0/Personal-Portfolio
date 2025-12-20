@@ -11,6 +11,7 @@ import Projects from "./Projects";
 import Contact from "./Contact";
 import Footer from "./Footer";
 import AnimatedBackground from "./AnimatedBackground";
+import CustomCursor from "../components/CustomCursor";
 
 export default function Home() {
   const roles = [
@@ -51,6 +52,7 @@ export default function Home() {
 
   return (
     <div id="home" className="relative overflow-hidden text-black">
+      <CustomCursor />
       <AnimatedBackground />
       <style>
         {`
@@ -65,7 +67,7 @@ export default function Home() {
       <Navbar onDownload={handleDownloadResume} className="z-50 relative" />
 
       {/* Hero Section - Centered & Minimal */}
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-6 md:px-12">
+      <div className="relative z-10 flex items-center min-h-screen px-6 md:px-50">
         <div className="max-w-3xl w-full space-y-8">
 
           {/* Available Badge with green background */}
@@ -81,17 +83,17 @@ export default function Home() {
 
           {/* Name */}
           <motion.h1 
-            className="text-5xl md:text-7xl font-medium tracking-tight"
+            className="text-5xl md:text-5xl font-medium tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Tartor
+            Hey, I'm Tartor
           </motion.h1>
 
           {/* Role Animation */}
           <motion.div
-            className="text-2xl md:text-4xl text-gray-600 font-normal flex items-center gap-3"
+            className="text-2xl md:text-4xl text-gray-600 font-bold flex items-center gap-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -103,7 +105,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4 }}
-                className="text-black font-medium"
+                className="text-black font-bold"
               >
                 {roles[index]}
               </motion.span>
@@ -141,9 +143,9 @@ export default function Home() {
       </div>
 
       {/* Sections */}
-      <About id="about" />
       <Skills id="skills" />
-      <Projects id="projects" />
+      <About id="about" />
+      {/* <Projects id="projects" /> */}
       <Contact id="contact" />
       <Footer />
     </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useAnimation, useMotionValue } from "framer-motion";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -7,7 +7,7 @@ import {
   FaReact,
   FaGithub,
   FaDatabase,
-  FaServer,
+  FaNodeJs,
 } from "react-icons/fa";
 import {
   SiTailwindcss,
@@ -16,124 +16,146 @@ import {
   SiVercel,
   SiPostgresql,
   SiPostman,
+  SiMongodb,
+  SiExpress,
 } from "react-icons/si";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 export default function Skills({ id, className = "" }) {
-  const [activeTab, setActiveTab] = useState("frontend");
-
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
   }, []);
 
-  const frontendSkills = [
-    { icon: FaHtml5, name: "HTML", color: "text-orange-500" },
-    { icon: FaCss3Alt, name: "CSS", color: "text-blue-500" },
-    { icon: FaJs, name: "JavaScript", color: "text-yellow-500" },
-    { icon: FaReact, name: "React", color: "text-cyan-500" },
-    { icon: SiTailwindcss, name: "Tailwind", color: "text-teal-500" },
-    { icon: SiVite, name: "Vite", color: "text-purple-500" },
+  const allSkills = [
+    { icon: FaHtml5, name: "HTML" },
+    { icon: FaCss3Alt, name: "CSS" },
+    { icon: FaJs, name: "JavaScript" },
+    { icon: FaReact, name: "React" },
+    { icon: SiTailwindcss, name: "Tailwind" },
+    { icon: SiVite, name: "Vite" },
+    { icon: FaNodeJs, name: "Node.js" },
+    { icon: SiExpress, name: "Express" },
+    { icon: SiMongodb, name: "MongoDB" },
+    { icon: SiPostgresql, name: "PostgreSQL" },
+    { icon: SiSpringboot, name: "SpringBoot" },
+    { icon: FaGithub, name: "GitHub" },
+    { icon: SiPostman, name: "Postman" },
+    { icon: SiVercel, name: "Vercel" },
   ];
 
-  const backendSkills = [
-    { icon: FaDatabase, name: "MongoDB", color: "text-green-500" },
-    { icon: SiPostgresql, name: "PostgreSQL", color: "text-blue-600" },
-    { icon: SiSpringboot, name: "SpringBoot", color: "text-green-500" },
-  ];
+  // Duplicate skills for seamless loop
+  const duplicatedSkills = [...allSkills, ...allSkills];
 
-  const otherTools = [
-    { icon: FaGithub, name: "GitHub", color: "text-gray-800" },
-    { icon: SiPostman, name: "Postman", color: "text-orange-500" },
-    { icon: SiVercel, name: "Vercel", color: "text-black" },
-  ];
+  const [hoverCount, setHoverCount] = useState(0);
+  const [halfWidth, setHalfWidth] = useState(0);
+  const x = useMotionValue(0);
+  const controls = useAnimation();
+  const scrollerRef = useRef(null);
+  const originalDuration = 30;
 
-  const getSkills = () => {
-    if (activeTab === "frontend") return frontendSkills;
-    if (activeTab === "backend") return backendSkills;
-    return otherTools;
+  useEffect(() => {
+    if (scrollerRef.current) {
+      setHalfWidth(scrollerRef.current.scrollWidth / 2);
+    }
+  }, []);
+
+  const resumeAnimation = () => {
+    if (!halfWidth) return;
+
+    const currentX = x.get();
+    const remainingDistance = halfWidth + currentX; // Positive value
+    const remainingDuration = (remainingDistance / halfWidth) * originalDuration;
+
+    controls.start({
+      x: -halfWidth,
+      transition: {
+        duration: remainingDuration,
+        ease: "linear",
+        onComplete: () => {
+          x.set(0);
+          resumeAnimation(); // Recurse for infinite loop
+        },
+      },
+    });
   };
+
+  useEffect(() => {
+    if (halfWidth > 0) {
+      resumeAnimation();
+    }
+  }, [halfWidth]);
+
+  useEffect(() => {
+    if (hoverCount > 0) {
+      controls.stop();
+    } else {
+      resumeAnimation();
+    }
+  }, [hoverCount]);
 
   return (
     <section
       id={id}
-      className={`${className} w-full py-20 px-4 md:px-60  text-black`}
+      className={`${className} w-full px-6 md:px-20 text-black overflow-hidden`}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <motion.div
-          className="mb-20"
+        {/* <motion.div
+          className="mb-16"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-5xl md:text-6xl font-medium mb-2">Skills</h2>
-          <div className="w-20 h-1 bg-black"></div>
-        </motion.div>
+          <h2 className="text-5xl md:text-5xl font-bold mb-6">Skills</h2>
+          <div className="w-16 h-1 bg-black"></div>
+        </motion.div> */}
 
-        {/* Tabs */}
-        <div className="flex justify-start gap-3 mb-16 flex-wrap">
-          {[
-            { name: "frontend", label: "Frontend", icon: FaReact },
-            { name: "backend", label: "Backend", icon: FaServer },
-            { name: "tools", label: "Tools", icon: FaGithub },
-          ].map((tab) => (
-            <motion.button
-              key={tab.name}
-              onClick={() => setActiveTab(tab.name)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all ${
-                activeTab === tab.name
-                  ? "bg-black text-white"
-                  : "bg-black/5 text-black hover:bg-black/10"
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+        {/* Infinite Scrolling Skills */}
+        <div className="relative">
+          {/* Gradient overlays */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+          <div className="overflow-hidden py-8">
+            <motion.div
+              ref={scrollerRef}
+              style={{ x }}
+              animate={controls}
+              className="flex gap-8"
             >
-              <tab.icon className="w-4 h-4" />
-              <span className="text-sm">{tab.label}</span>
-            </motion.button>
-          ))}
+              {duplicatedSkills.map((skill, idx) => (
+                <motion.div
+                  key={idx}
+                  className="flex flex-col items-center gap-4 min-w-[80px] group cursor-pointer"
+                  whileHover={{ scale: 1.1 }}
+                  onMouseEnter={() => setHoverCount((prev) => prev + 1)}
+                  onMouseLeave={() => setHoverCount((prev) => prev - 1)}
+                >
+                  <div className="relative">
+                    {/* Adjust icon size here */}
+                    <skill.icon className="w-10 h-10 text-gray-400 group-hover:text-black transition-all duration-300" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-500 group-hover:text-black transition-colors">
+                    {skill.name}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
-        {/* Skills Grid - Just Icons Moving */}
-        <motion.div
-          className="grid grid-cols-3 md:grid-cols-6 gap-8"
-          key={activeTab}
+        {/* Optional: Description */}
+        <motion.p
+          className="text-center text-black mt-12 text-lg"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
-          {getSkills().map((skill, idx) => (
-            <motion.div
-              key={skill.name}
-              className="flex flex-col items-center gap-3 group"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -8 }}
-            >
-              <div className="relative">
-                <motion.div
-                  animate={{ 
-                    y: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: idx * 0.2,
-                  }}
-                >
-                  <skill.icon className={`w-16 h-16 ${skill.color} transition-all`} />
-                </motion.div>
-              </div>
-              <span className="text-sm font-medium text-gray-600 group-hover:text-black transition-colors">
-                {skill.name}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-
+          Technologies I work with to bring ideas to life
+        </motion.p>
       </div>
     </section>
   );

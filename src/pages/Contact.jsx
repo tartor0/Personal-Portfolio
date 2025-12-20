@@ -32,12 +32,12 @@ export default function Contact({ id, className = "" }) {
   return (
     <div
       id={id}
-      className={`${className} min-h-screen px-6 md:px-60 text-black py-20`}
+      className={`${className} min-h-screen px-6 md:px-30 text-black py-20`}
     >
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-20" data-aos="fade-down">
-          <h2 className="text-5xl md:text-6xl font-medium mb-2">Get in Touch</h2>
+          <h2 className="text-5xl md:text-5xl font-medium mb-2">Get in Touch</h2>
           <div className="w-20 h-1 bg-black"></div>
         </div>
 

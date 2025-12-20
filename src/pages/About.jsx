@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
-  FaUser,
-  FaLightbulb,
-  FaMapMarkerAlt,
   FaEnvelope,
   FaWhatsapp,
+  FaGraduationCap,
   FaCode,
   FaRocket,
-  FaHeart,
+  FaLightbulb,
+  FaMapMarkerAlt,
+  FaTools,
+  FaUsers,
 } from "react-icons/fa";
-import PersonalImage from "../assets/personal-image.avif";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -21,9 +21,45 @@ export default function About({ id, className = "" }) {
 
   const [copied, setCopied] = useState(false);
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
+  const timelineRef = useRef(null);
+  const lineRef = useRef(null);
 
   const email = "gaaditartor160@gmail.com";
   const whatsapp = "+2349160572315";
+
+  // Handle scroll for line animation
+  useEffect(() => {
+    let rafId;
+    
+    const handleScroll = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      
+      rafId = requestAnimationFrame(() => {
+        if (!timelineRef.current || !lineRef.current) return;
+        
+        const timelineTop = timelineRef.current.getBoundingClientRect().top;
+        const timelineHeight = timelineRef.current.offsetHeight;
+        const viewportCenter = window.innerHeight / 2;
+        
+        const scrolled = viewportCenter - timelineTop;
+        const height = Math.max(0, Math.min(scrolled, timelineHeight));
+        
+        lineRef.current.style.height = `${height}px`;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(email).then(() => {
@@ -39,149 +75,251 @@ export default function About({ id, className = "" }) {
     });
   };
 
-  const stats = [
-    { number: "2+", label: "Years Experience", icon: FaCode },
-    { number: "15+", label: "Projects Built", icon: FaRocket },
-    { number: "100%", label: "Client Satisfaction", icon: FaHeart },
+  const timeline = [
+    {
+      year: "2023-Present",
+      title: "Fullstack Developer",
+      subtitle: "Freelance & Personal Projects",
+      icon: FaRocket,
+      description: "Building modern web applications with React, Node.js, and various technologies. Specializing in creating scalable, user-friendly solutions for clients across different industries."
+    },
+    {
+      year: "2022-2023",
+      title: "Advanced Learning",
+      subtitle: "Backend & Databases",
+      icon: FaTools,
+      description: "Expanded skills into backend development, learning Node.js, Express, MongoDB, and PostgreSQL. Built full-stack applications and RESTful APIs, understanding the complete development cycle."
+    },
+    {
+      year: "2022",
+      title: "Frontend Developer",
+      subtitle: "React & Modern Frameworks",
+      icon: FaCode,
+      description: "Focused on mastering React, JavaScript, and modern frontend frameworks. Created multiple projects including e-commerce platforms, portfolio sites, and interactive web applications with smooth animations."
+    },
+    {
+      year: "2021",
+      title: "First Projects",
+      subtitle: "Building & Experimenting",
+      icon: FaUsers,
+      description: "Created my first real projects and started taking on small freelance work. Learned about responsive design, accessibility, and user experience. Each project taught me something new."
+    },
+    {
+      year: "2021",
+      title: "The Beginning",
+      subtitle: "Self-Taught Journey",
+      icon: FaGraduationCap,
+      description: "Started my coding journey with HTML, CSS, and JavaScript. Spent countless hours learning through online resources, YouTube tutorials, and documentation. Fell in love with the power of creating with code."
+    },
   ];
 
   return (
     <section
       id={id}
-      className={`${className} min-h-screen py-20 text-black px-6 md:px-60`}
+      className={`${className} min-h-screen py-20 text-black px-6 md:px-10`}
     >
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          className="mb-20"
+          className="mb-14"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-5xl md:text-6xl font-medium mb-2">About</h2>
-          <div className="w-20 h-1 bg-black"></div>
+          <h2 className="text-5xl md:text-5xl font-medium mb-3">About</h2>
+          <div className="w-16 h-1 bg-black"></div>
         </motion.div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        {/* Improved Intro Section */}
+        <motion.div
+          className="mb-20 grid md:grid-cols-2 gap-8 items-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div>
+            <h3 className="text-2xl md:text-2xl font-semibold text-black mb-4">
+              Crafting Digital Excellence
+            </h3>
+            <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+              Hi, I'm <span className="font-semibold text-black">Tartor Gaadi</span>, a full-stack developer passionate about building innovative web solutions that make a difference.
+            </p>
+            <p className="text-base text-gray-600 leading-relaxed">
+              Based in Port Harcourt, Nigeria, I transform complex problems into elegant, user-centric applications. From concept to deployment, I ensure every detail contributes to an outstanding experience.
+            </p>
+          </div>
+          <div className="bg-black/5 border border-black/10 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <FaLightbulb className="w-6 h-6 text-gray-600" />
+              <h4 className="text-xl font-semibold">My Approach</h4>
+            </div>
+            <ul className="space-y-2 text-gray-700 text-base">
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
+                Clean, scalable code
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
+                User-focused design
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
+                Continuous innovation
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
+                Problem-solving mindset
+              </li>
+            </ul>
+          </div>
+        </motion.div>
+
+        {/* Timeline Section */}
+        <div className="relative mb-20" ref={timelineRef}>
+          {/* Background Line */}
+          <div className="absolute left-0 md:left-8 top-0 bottom-0 w-0.5 bg-black/10"></div>
           
-          {/* Left - Image */}
-          <motion.div
-            className="flex justify-center lg:justify-start"
-            data-aos="fade-right"
-          >
-            <div className="relative">
-              <img
-                src={PersonalImage}
-                alt="Tartor"
-                className="rounded-2xl w-80 h-80 object-cover border border-black/10"
-              />
-              <div className="absolute -bottom-4 -right-4 bg-black text-white px-6 py-3 rounded-full">
-                <p className="text-sm font-medium flex items-center gap-2">
-                  <FaMapMarkerAlt />
-                  Port Harcourt, NG
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          {/* Animated Line */}
+          <div 
+            ref={lineRef}
+            className="absolute left-0 md:left-8 top-0 w-0.5 bg-black"
+            style={{ height: '0px' }}
+          ></div>
 
-          {/* Right - Info */}
-          <motion.div
-            className="space-y-8"
-            data-aos="fade-left"
-          >
-            <div>
-              <h3 className="text-3xl font-semibold mb-4">Tartor Gaadi</h3>
-              <p className="text-gray-600 text-lg leading-relaxed font-normal">
-                A passionate fullstack developer who loves building clean, modern, and scalable web applications. 
-                I turn ideas into reality through code.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                <FaLightbulb className="text-gray-400" />
-                My Approach
-              </h4>
-              <p className="text-gray-600 leading-relaxed font-normal">
-                Focused on intuitive UI, smooth UX, and writing maintainable code that scales. 
-                Every pixel matters, every interaction counts.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {stats.map((stat, idx) => (
+          {timeline.map((item, idx) => (
             <motion.div
               key={idx}
-              className="text-center p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
-              data-aos="fade-up"
-              data-aos-delay={idx * 100}
-              whileHover={{ y: -5 }}
+              className="relative mb-16 md:mb-20 pl-12 md:pl-24"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: idx * 0.2 }}
             >
-              <stat.icon className="text-gray-400 w-8 h-8 mb-3 mx-auto" />
-              <h4 className="text-4xl font-semibold mb-2">{stat.number}</h4>
-              <p className="text-gray-500 font-normal">{stat.label}</p>
+              {/* Timeline Dot */}
+              <div className="absolute left-0 md:left-8 top-2 w-4 h-4 -ml-[7px] rounded-full bg-black border-4 border-white shadow-lg"></div>
+
+              {/* Content */}
+              <div className="bg-white/50 border border-black/10 rounded-2xl p-6 md:p-8 hover:border-black/30 transition-all">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="p-3 bg-black/5 rounded-xl">
+                    <item.icon className="w-6 h-6 text-gray-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-medium mb-1">{item.year}</p>
+                    <h3 className="text-2xl font-semibold text-black mb-1">{item.title}</h3>
+                    <p className="text-base text-gray-600 font-medium">{item.subtitle}</p>
+                  </div>
+                </div>
+                <p className="text-gray-700 leading-relaxed">{item.description}</p>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Contact Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Email */}
-          <motion.div
-            className="p-8 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
-            data-aos="fade-up"
-            whileHover={{ y: -5 }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <FaEnvelope className="text-gray-400 w-6 h-6" />
-                <span className="text-sm text-gray-500 font-normal">Email</span>
+        {/* Philosophy Section */}
+        <motion.div
+          className="mb-20 bg-black/5 border border-black/10 rounded-2xl p-8 md:p-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <FaLightbulb className="w-8 h-8 text-gray-600" />
+            <h3 className="text-2xl md:text-3xl font-semibold">My Philosophy</h3>
+          </div>
+          <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
+            I believe in writing clean, maintainable code that scales. Each project is an opportunity 
+            to push boundaries and create something meaningful. I'm constantly learning, adapting, 
+            and refining my craft.
+          </p>
+          <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+            Beyond just functionality, I focus on creating digital experiences that feel intuitive 
+            and delightful. The details matter—from smooth animations to thoughtful interactions.
+          </p>
+        </motion.div>
+
+        {/* Contact Section */}
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <h3 className="text-2xl font-semibold mb-8 flex items-center gap-2">
+            <FaMapMarkerAlt className="text-gray-600" />
+            Get in Touch
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Email Card */}
+            <motion.div
+              className="p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all bg-white/50"
+              whileHover={{ y: -3 }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-full bg-black/5">
+                  <FaEnvelope className="text-gray-600 w-5 h-5" />
+                </div>
+                <span className="text-base font-medium text-gray-700">Email</span>
               </div>
+              <p className="text-sm text-gray-500 font-normal mb-4">
+                Let's discuss your next project
+              </p>
               <button
                 onClick={handleCopyEmail}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   copied
-                    ? "bg-green-100 text-green-700"
-                    : "bg-black/5 hover:bg-black/10"
+                    ? "bg-green-500 text-white"
+                    : "bg-black text-white hover:bg-gray-800"
                 }`}
               >
-                {copied ? "Copied!" : "Copy"}
+                {copied ? "✓ Email Copied!" : "Copy Email"}
               </button>
-            </div>
-            <p className="text-black font-normal break-all">{email}</p>
-          </motion.div>
+            </motion.div>
 
-          {/* WhatsApp */}
-          <motion.div
-            className="p-8 border border-black/10 rounded-2xl hover:border-black/30 transition-all"
-            data-aos="fade-up"
-            data-aos-delay="100"
-            whileHover={{ y: -5 }}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <FaWhatsapp className="text-gray-400 w-6 h-6" />
-                <span className="text-sm text-gray-500 font-normal">WhatsApp</span>
+            {/* WhatsApp Card */}
+            <motion.div
+              className="p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all bg-white/50"
+              whileHover={{ y: -3 }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 rounded-full bg-black/5">
+                  <FaWhatsapp className="text-gray-600 w-5 h-5" />
+                </div>
+                <span className="text-base font-medium text-gray-700">WhatsApp</span>
               </div>
+              <p className="text-sm text-gray-500 font-normal mb-4">
+                Quick chat? Message me directly
+              </p>
               <button
                 onClick={handleCopyWhatsapp}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   copiedWhatsapp
-                    ? "bg-green-100 text-green-700"
-                    : "bg-black/5 hover:bg-black/10"
+                    ? "bg-green-500 text-white"
+                    : "bg-black text-white hover:bg-gray-800"
                 }`}
               >
-                {copiedWhatsapp ? "Copied!" : "Copy"}
+                {copiedWhatsapp ? "✓ Number Copied!" : "Copy Number"}
               </button>
-            </div>
-            <p className="text-black font-normal">{whatsapp}</p>
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Location Badge */}
+        <motion.div
+          className="mt-12 inline-flex items-center gap-2 bg-black/5 border border-black/10 px-5 py-3 rounded-full"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <FaMapMarkerAlt className="text-gray-600" />
+          <span className="text-sm font-medium text-gray-700">Port Harcourt, Nigeria</span>
+        </motion.div>
       </div>
     </section>
   );
