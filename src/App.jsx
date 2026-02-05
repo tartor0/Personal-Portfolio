@@ -5,23 +5,40 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Skills from './pages/Skills';
 import Contact from './pages/Contact';
-// import Experience from './pages/Experience'; // create this page if you haven’t yet
+import Projects from './pages/Projects';
 import Navbar from './components/Navbar';
+import AnimatedBackground from './pages/AnimatedBackground';
 
 function App() {
   return (
     <Router>
-      {/* <Navbar /> */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/skills" element={<Skills />} />
-        {/* <Route path="/experience" element={<Experience />} /> */}
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-      <Footer />
+      <div className="relative min-h-screen bg-bg text-text-main selection:bg-accent-blue/20 overflow-x-hidden">
+        <AnimatedBackground />
+        <div className="grid-background" />
+        <div className="noise-texture" />
+        <Navbar />
+        <main className="relative z-10">
+          <div id="home">
+            <Home />
+          </div>
+          <div id="about">
+            <About />
+          </div>
+          <div id="skills">
+            <Skills />
+          </div>
+          <div id="projects">
+            <Projects />
+          </div>
+          <div id="contact">
+            <Contact />
+          </div>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }
+
 
 export default App;

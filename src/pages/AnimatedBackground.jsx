@@ -1,131 +1,156 @@
 import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 export default function AnimatedBackground() {
-  const canvasRef = useRef(null);
+  const mountRef = useRef(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!mountRef.current) return;
 
-    const ctx = canvas.getContext('2d');
-    let animationId;
-    let time = 0;
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true
+    });
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    mountRef.current.appendChild(renderer.domElement);
 
-    // Particle system
-    const particles = [];
-    const particleCount = 100;
+    camera.position.z = 5;
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-      });
+    // Subtle Grid-aligned Particles
+    const particleCount = 1500;
+    const positionsArr = new Float32Array(particleCount * 3);
+    const velocitiesArr = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positionsArr[i] = (Math.random() - 0.5) * 25;
+      positionsArr[i + 1] = (Math.random() - 0.5) * 25;
+      positionsArr[i + 2] = (Math.random() - 0.5) * 10;
+
+      velocitiesArr[i] = (Math.random() - 0.5) * 0.002;
+      velocitiesArr[i + 1] = (Math.random() - 0.5) * 0.002;
+      velocitiesArr[i + 2] = (Math.random() - 0.5) * 0.001;
     }
+
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positionsArr, 3));
+
+    const particleMaterial = new THREE.PointsMaterial({
+      color: 0x3E5BFF,
+      size: 0.015,
+      transparent: true,
+      opacity: 0.2,
+      blending: THREE.AdditiveBlending,
+    });
+
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+
+    // Light Rays / Floating Orbs - More refined for light mode
+    const orbs = [];
+    const orbColors = [0x3E5BFF, 0x6366F1, 0xFFFFFF];
+    for (let i = 0; i < 4; i++) {
+      const geometry = new THREE.SphereGeometry(3, 64, 64);
+      const material = new THREE.MeshBasicMaterial({
+        color: orbColors[i % 3],
+        transparent: true,
+        opacity: 0.02,
+      });
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.set(
+        (Math.random() - 0.5) * 15,
+        (Math.random() - 0.5) * 15,
+        (Math.random() - 0.5) * 8
+      );
+      sphere.userData.velocity = {
+        x: (Math.random() - 0.5) * 0.003,
+        y: (Math.random() - 0.5) * 0.003,
+        z: (Math.random() - 0.5) * 0.001,
+      };
+      orbs.push(sphere);
+      scene.add(sphere);
+    }
+
+    // Mouse interaction
+    const mouse = { x: 0, y: 0 };
+    const handleMouseMove = (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
 
     // Animation loop
     const animate = () => {
-      time += 0.01;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      requestAnimationFrame(animate);
 
-      // Draw gradient background
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, 'rgba(245, 245, 245, 0.5)');
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0.5)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Update particles
+      const positions = particles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] += velocitiesArr[i];
+        positions[i + 1] += velocitiesArr[i + 1];
+        positions[i + 2] += velocitiesArr[i + 2];
 
-      // Update and draw particles
-      particles.forEach((particle, i) => {
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+        if (Math.abs(positions[i]) > 12) velocitiesArr[i] *= -1;
+        if (Math.abs(positions[i + 1]) > 12) velocitiesArr[i + 1] *= -1;
+        if (Math.abs(positions[i + 2]) > 5) velocitiesArr[i + 2] *= -1;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+      particles.rotation.y += 0.0001;
 
-        // Wrap around edges
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
+      // Update orbs
+      orbs.forEach((orb) => {
+        orb.position.x += orb.userData.velocity.x;
+        orb.position.y += orb.userData.velocity.y;
+        orb.position.z += orb.userData.velocity.z;
 
-        // Draw particle
-        ctx.fillStyle = `rgba(0, 0, 0, ${0.1 + Math.sin(time + i) * 0.05})`;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw connections
-        particles.forEach((otherParticle, j) => {
-          if (i === j) return;
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 150) {
-            ctx.strokeStyle = `rgba(0, 0, 0, ${0.1 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.stroke();
-          }
-        });
+        if (Math.abs(orb.position.x) > 10) orb.userData.velocity.x *= -1;
+        if (Math.abs(orb.position.y) > 10) orb.userData.velocity.y *= -1;
+        if (Math.abs(orb.position.z) > 6) orb.userData.velocity.z *= -1;
       });
 
-      // Draw floating shapes
-      for (let i = 0; i < 5; i++) {
-        const x = canvas.width / 2 + Math.sin(time * 0.5 + i * 2) * 300;
-        const y = canvas.height / 2 + Math.cos(time * 0.3 + i * 2) * 200;
-        const size = 50 + Math.sin(time + i) * 20;
+      // Camera follows mouse with smooth damping
+      camera.position.x += (mouse.x * 0.3 - camera.position.x) * 0.02;
+      camera.position.y += (mouse.y * 0.3 - camera.position.y) * 0.02;
+      camera.lookAt(0, 0, 0);
 
-        ctx.strokeStyle = `rgba(0, 0, 0, 0.05)`;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      // Draw noise pattern
-      for (let i = 0; i < 50; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        ctx.fillStyle = `rgba(0, 0, 0, ${Math.random() * 0.02})`;
-        ctx.fillRect(x, y, 1, 1);
-      }
-
-      animationId = requestAnimationFrame(animate);
+      renderer.render(scene, camera);
     };
 
     animate();
 
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      // Redistribute particles
-      particles.forEach(p => {
-        if (p.x > canvas.width) p.x = canvas.width;
-        if (p.y > canvas.height) p.y = canvas.height;
-      });
-    });
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      mountRef.current?.removeChild(renderer.domElement);
+      renderer.dispose();
+      particleGeometry.dispose();
+      particleMaterial.dispose();
+      orbs.forEach((orb) => {
+        orb.geometry.dispose();
+        orb.material.dispose();
+      });
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
+    <div
+      ref={mountRef}
       style={{
         position: 'fixed',
         top: 0,
@@ -134,6 +159,7 @@ export default function AnimatedBackground() {
         height: '100%',
         zIndex: -1,
         pointerEvents: 'none',
+        background: 'transparent',
       }}
     />
   );

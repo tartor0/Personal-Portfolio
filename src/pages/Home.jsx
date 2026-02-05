@@ -1,153 +1,147 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiMail, FiArrowRight } from "react-icons/fi";
-
-import resumePDF from "../assets/Tartor-Resume.pdf";
-
-import Navbar from "../components/Navbar";
-import About from "./About";
-import Skills from "./Skills";
-import Projects from "./Projects";
-import Contact from "./Contact";
-import Footer from "./Footer";
-import AnimatedBackground from "./AnimatedBackground";
-import CustomCursor from "../components/CustomCursor";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { FiArrowRight, FiGithub, FiLinkedin, FiTwitter, FiMail, FiDownload } from "react-icons/fi";
 
 export default function Home() {
-  const roles = [
-    "React Enthusiast",
-    "Web Developer",
-    "Fullstack Developer",
-    "Frontend Developer",
-  ];
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
 
-  const [index, setIndex] = useState(0);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const roles = ["Software Architect", "UI/UX Specialist", "Fullstack Engineer", "Creative Developer"];
+  const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIndex((prev) => (prev + 1) % roles.length);
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
     }, 4000);
-    return () => clearTimeout(timeout);
-  }, [index]);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
+    return () => clearInterval(interval);
   }, []);
 
-  const handleDownloadResume = () => {
-    try {
-      const link = document.createElement('a');
-      link.href = resumePDF;
-      link.download = 'Tartor_CV.pdf';
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error('Download failed:', error);
-      window.open(resumePDF, '_blank');
-    }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    },
   };
 
   return (
-    <div id="home" className="relative overflow-hidden text-black">
-      <CustomCursor />
-      <AnimatedBackground />
-      <style>
-        {`
-          @import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
-          
-          * {
-            font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
-          }
-        `}
-      </style>
+    <div ref={heroRef} className="relative min-h-screen overflow-hidden selection:bg-accent-blue/20">
+      {/* Background Orbs - Subtle for light mode */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-accent-blue/5 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent-indigo/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
 
-      <Navbar onDownload={handleDownloadResume} className="z-50 relative" />
-
-      {/* Hero Section - Centered & Minimal */}
-      <div className="relative z-10 flex items-center min-h-screen px-6 md:px-50">
-        <div className="max-w-3xl w-full space-y-8">
-
-          {/* Available Badge with green background */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 container mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-32 min-h-screen flex flex-col justify-center"
+      >
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-5xl"
+        >
+          {/* Status Badge */}
           <motion.div
-            className="inline-flex items-center gap-2 bg-green-600/20 border border-green-500/30 px-4 py-1.5 rounded-full text-sm text-green-700 font-medium"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
+            variants={itemVariants}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-border mb-8 shadow-sm"
           >
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-            Available for collaborations
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-blue"></span>
+            </span>
+            <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-text-dim uppercase">Available for new opportunities</span>
           </motion.div>
 
-          {/* Name */}
-          <motion.h1 
-            className="text-5xl md:text-5xl font-medium tracking-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Hey, I'm Tartor
-          </motion.h1>
+          {/* Main Title Section */}
+          <div className="space-y-4 mb-12">
+            <motion.h1
+              variants={itemVariants}
+              className="text-6xl md:text-9xl font-clash font-bold leading-[0.85] tracking-tighter"
+            >
+              TARTOR <br />
+              <span className="text-accent-blue">GAADI.</span>
+            </motion.h1>
 
-          {/* Role Animation */}
-          <motion.div
-            className="text-2xl md:text-4xl text-gray-600 font-bold flex items-center gap-3"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={roles[index]}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-                className="text-black font-bold"
-              >
-                {roles[index]}
-              </motion.span>
-            </AnimatePresence>
-          </motion.div>
+            <motion.div variants={itemVariants} className="flex items-center gap-4 pt-4">
+              <div className="h-0.5 w-12 bg-accent-blue" />
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={roleIndex}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-lg md:text-2xl font-clash text-text-dim font-bold uppercase tracking-wider"
+                >
+                  {roles[roleIndex]}
+                </motion.p>
+              </AnimatePresence>
+            </motion.div>
+          </div>
 
-          {/* Description */}
+          {/* Bio Subtext */}
           <motion.p
-            className="text-lg text-gray-600 font-normal max-w-xl leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            variants={itemVariants}
+            className="text-xl md:text-2xl text-text-dim max-w-2xl leading-relaxed mb-16 font-medium"
           >
-            Building modern web applications with clean design and seamless user experiences.
+            A multidisciplinary developer focusing on crafting refined digital experiences.
+            Bridging the gap between performance and aesthetics.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div
-            className="flex items-center gap-4 pt-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <button className="group flex items-center gap-2 text-black px-6 py-3 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-all font-medium">
-              <span>Get in touch</span>
-              <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+          {/* CTA Group */}
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-5">
+            <button className="magnetic-button">
+              Start Project
+              <FiArrowRight />
             </button>
-
-            <button className="p-3 text-black border border-black/20 rounded-full hover:border-black/40 hover:bg-black/5 transition-all">
-              <FiMail />
+            <button className="px-10 py-4 rounded-xl border-2 border-border font-clash font-bold hover:bg-white transition-all flex items-center gap-2 shadow-sm">
+              <FiDownload size={18} />
+              Resume
             </button>
           </motion.div>
 
-        </div>
-      </div>
-
-      {/* Sections */}
-      <Skills id="skills" />
-      <About id="about" />
-      {/* <Projects id="projects" /> */}
-      <Contact id="contact" />
-      <Footer />
+          {/* Social Links Panel */}
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center gap-8 mt-24"
+          >
+            {[
+              { icon: FiGithub, href: "https://github.com/tartor0", label: "Github" },
+              { icon: FiLinkedin, href: "#", label: "LinkedIn" },
+              { icon: FiTwitter, href: "#", label: "Twitter" },
+              { icon: FiMail, href: "mailto:gaaditartor160@gmail.com", label: "Email" },
+            ].map((social, idx) => (
+              <motion.a
+                key={idx}
+                href={social.href}
+                whileHover={{ y: -4, color: '#3E5BFF' }}
+                className="text-text-dim/60 hover:text-accent-blue transition-all"
+                aria-label={social.label}
+              >
+                <social.icon size={24} />
+              </motion.a>
+            ))}
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

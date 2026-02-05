@@ -1,31 +1,15 @@
 import { useState, useEffect } from "react";
-import { FiDownload, FiMenu, FiX, FiHome, FiUser, FiCode, FiBriefcase, FiMail } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiHome, FiUser, FiCode, FiBriefcase, FiMail, FiDownload } from "react-icons/fi";
 
-export default function Navbar({ onDownload }) {
-  const [open, setOpen] = useState(false);
+export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
+  const [scrolled, setScrolled] = useState(false);
 
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -96;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-    setOpen(false);
-  };
-
-  const handleDownloadResume = () => {
-    setOpen(false);
-    
-    if (onDownload) {
-      onDownload();
-    }
-  };
-
-  // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+
       const sections = ["home", "about", "skills", "projects", "contact"];
       const scrollPosition = window.scrollY + 200;
 
@@ -45,6 +29,15 @@ export default function Navbar({ onDownload }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -100;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
   const navItems = [
     { id: "home", icon: FiHome, label: "Home" },
     { id: "about", icon: FiUser, label: "About" },
@@ -54,149 +47,50 @@ export default function Navbar({ onDownload }) {
   ];
 
   return (
-    <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] md:w-auto max-w-4xl">
-      <div className="bg-white border border-black/10 rounded-3xl shadow-lg px-3 py-2">
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-2">
-          {/* Home Icon with highlight */}
-          <button
-            onClick={() => scrollToSection("home")}
-            className={`transition-all p-3 rounded-full ${
-              activeSection === "home"
-                ? "text-black hover:bg-black/5"
-                : "text-black hover:bg-black/5"
-            }`}
-            title="Home"
-          >
-            <FiHome size={18} />
-          </button>
-
-          {/* Separator */}
-          <div className="w-px h-6 bg-black/10 mx-1"></div>
-
-          {/* Other nav icons */}
-          {navItems.slice(1).map((item) => (
+    <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6 pointer-events-none">
+      <motion.nav
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`
+          pointer-events-auto flex items-center gap-2 px-4 py-2 glass-island
+          transition-all duration-500
+          ${scrolled ? "scale-95 shadow-xl" : "scale-100"}
+        `}
+      >
+        <div className="flex items-center gap-1">
+          {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => scrollToSection(item.id)}
-              className={`transition-all p-3 rounded-full ${
-                activeSection === item.id
-                  ? "bg-black text-white"
-                  : "text-black hover:bg-black/5"
-              }`}
-              title={item.label}
+              className={`
+                relative px-4 py-2 rounded-full text-sm font-clash font-semibold transition-all duration-300
+                flex items-center gap-2 group
+                ${activeSection === item.id
+                  ? "text-accent-blue"
+                  : "text-text-dim hover:text-text-main"}
+              `}
             >
-              <item.icon size={18} />
+              {activeSection === item.id && (
+                <motion.div
+                  layoutId="navGlow"
+                  className="absolute inset-0 bg-accent-blue/10 rounded-full"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <item.icon size={16} className={`transition-transform duration-300 ${activeSection === item.id ? "scale-110" : "group-hover:scale-110"}`} />
+              <span className="hidden md:block">{item.label}</span>
             </button>
           ))}
-
-          {/* Separator before resume */}
-          <div className="w-px h-6 bg-black/10 mx-1"></div>
-
-          {/* Resume Button */}
-          <button
-            onClick={handleDownloadResume}
-            className="bg-black text-white px-6 py-2.5 rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
-          >
-            Resume
-          </button>
         </div>
 
-        {/* Tablet/Mobile Compact Menu */}
-        <div className="lg:hidden flex items-center justify-between gap-2">
-          {/* Left side - Home + Active Section */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => scrollToSection("home")}
-              className={`transition-all p-2.5 rounded-full ${
-                activeSection === "home"
-                  ? "bg-black text-white"
-                  : "text-black hover:bg-black/5"
-              }`}
-            >
-              <FiHome size={18} />
-            </button>
-            
-            {activeSection !== "home" && (
-              <>
-                <div className="w-px h-5 bg-black/10"></div>
-                <button
-                  onClick={() => scrollToSection(activeSection)}
-                  className="bg-black text-white p-2.5 rounded-full"
-                >
-                  {navItems.find(item => item.id === activeSection)?.icon && 
-                    (() => {
-                      const Icon = navItems.find(item => item.id === activeSection).icon;
-                      return <Icon size={18} />;
-                    })()
-                  }
-                </button>
-              </>
-            )}
-          </div>
+        <div className="w-px h-6 bg-border mx-2" />
 
-          {/* Right side - Resume + Menu */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDownloadResume}
-              className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
-            >
-              Resume
-            </button>
-            
-            <div className="w-px h-5 bg-black/10"></div>
-            
-            <button
-              onClick={() => setOpen(!open)}
-              className={`p-2.5 rounded-full transition-all ${
-                open 
-                  ? "bg-black text-white" 
-                  : "text-black hover:bg-black/5"
-              }`}
-            >
-              {open ? <FiX size={20} /> : <FiMenu size={20} />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Dropdown Menu */}
-      {open && (
-        <div className="fixed inset-0 z-40 lg:hidden">
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          ></div>
-
-          {/* Menu panel */}
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-11/12 max-w-sm bg-white/95 backdrop-blur-xl rounded-2xl p-6 flex flex-col gap-3 shadow-xl border border-black/10">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`flex items-center gap-3 transition-colors p-3 text-left rounded-xl ${
-                  activeSection === item.id
-                    ? "bg-black text-white"
-                    : "text-black hover:bg-black/5"
-                }`}
-              >
-                <item.icon size={20} />
-                <span className="font-medium">{item.label}</span>
-              </button>
-            ))}
-
-            {/* Mobile Resume Button */}
-            <button
-              onClick={handleDownloadResume}
-              className="mt-2 flex items-center justify-center gap-2 bg-black text-white rounded-xl px-5 py-3 font-medium hover:bg-gray-800 transition-all"
-            >
-              <FiDownload size={18} />
-              Download Resume
-            </button>
-          </div>
-        </div>
-      )}
-    </nav>
+        <button className="flex items-center gap-2 px-4 py-2 bg-text-main text-white rounded-full text-sm font-clash font-bold hover:bg-accent-blue transition-colors group">
+          <FiDownload className="group-hover:-translate-y-0.5 transition-transform" />
+          <span className="hidden sm:block">Resume</span>
+        </button>
+      </motion.nav>
+    </div>
   );
 }

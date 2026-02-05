@@ -1,0 +1,125 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=cabinet-grotesk@100,200,300,400,500,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-clash: "Clash Display", sans-serif;
+    --font-cabinet: "Cabinet Grotesk", sans-serif;
+    --font-inter: "Inter", sans-serif;
+    
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-accent-blue: #3E5BFF;
+    --color-accent-indigo: #6366F1;
+    --color-border: rgba(15, 23, 42, 0.08);
+    --color-border-strong: rgba(15, 23, 42, 0.15);
+    --color-text-main: #0F172A;
+    --color-text-dim: #64748B;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(15, 23, 42, 0.1);
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+  
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-cabinet);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body::selection {
+    background-color: rgba(62, 91, 255, 0.2);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-clash);
+    letter-spacing: -0.02em;
+    color: var(--color-text-main);
+  }
+}
+
+@layer components {
+  .bento-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 2rem;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .bento-card:hover {
+    border-color: var(--color-accent-blue);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  }
+
+  .grid-background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+      linear-gradient(var(--color-border-strong) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border-strong) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.4;
+  }
+
+  .noise-texture {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.02;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .magnetic-button {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-text-main);
+    color: white;
+    font-family: var(--font-clash);
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .magnetic-button:hover {
+    background-color: var(--color-accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(62, 91, 255, 0.2);
+  }
+
+  .glass-island {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 9999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  .text-luxury {
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+}

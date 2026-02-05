@@ -1,325 +1,110 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
-  FaEnvelope,
-  FaWhatsapp,
   FaGraduationCap,
   FaCode,
   FaRocket,
   FaLightbulb,
   FaMapMarkerAlt,
-  FaTools,
-  FaUsers,
+  FaEnvelope,
+  FaWhatsapp,
 } from "react-icons/fa";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
-export default function About({ id, className = "" }) {
-  useEffect(() => {
-    AOS.init({ duration: 800, once: false });
-  }, []);
-
-  const [copied, setCopied] = useState(false);
-  const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
-  const timelineRef = useRef(null);
-  const lineRef = useRef(null);
-
-  const email = "gaaditartor160@gmail.com";
-  const whatsapp = "+2349160572315";
-
-  // Handle scroll for line animation
-  useEffect(() => {
-    let rafId;
-    
-    const handleScroll = () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-      
-      rafId = requestAnimationFrame(() => {
-        if (!timelineRef.current || !lineRef.current) return;
-        
-        const timelineTop = timelineRef.current.getBoundingClientRect().top;
-        const timelineHeight = timelineRef.current.offsetHeight;
-        const viewportCenter = window.innerHeight / 2;
-        
-        const scrolled = viewportCenter - timelineTop;
-        const height = Math.max(0, Math.min(scrolled, timelineHeight));
-        
-        lineRef.current.style.height = `${height}px`;
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-    };
-  }, []);
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(email).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  const handleCopyWhatsapp = () => {
-    navigator.clipboard.writeText(whatsapp).then(() => {
-      setCopiedWhatsapp(true);
-      setTimeout(() => setCopiedWhatsapp(false), 2000);
-    });
-  };
-
-  const timeline = [
-    {
-      year: "2023-Present",
-      title: "Fullstack Developer",
-      subtitle: "Freelance & Personal Projects",
-      icon: FaRocket,
-      description: "Building modern web applications with React, Node.js, and various technologies. Specializing in creating scalable, user-friendly solutions for clients across different industries."
-    },
-    {
-      year: "2022-2023",
-      title: "Advanced Learning",
-      subtitle: "Backend & Databases",
-      icon: FaTools,
-      description: "Expanded skills into backend development, learning Node.js, Express, MongoDB, and PostgreSQL. Built full-stack applications and RESTful APIs, understanding the complete development cycle."
-    },
-    {
-      year: "2022",
-      title: "Frontend Developer",
-      subtitle: "React & Modern Frameworks",
-      icon: FaCode,
-      description: "Focused on mastering React, JavaScript, and modern frontend frameworks. Created multiple projects including e-commerce platforms, portfolio sites, and interactive web applications with smooth animations."
-    },
-    {
-      year: "2021",
-      title: "First Projects",
-      subtitle: "Building & Experimenting",
-      icon: FaUsers,
-      description: "Created my first real projects and started taking on small freelance work. Learned about responsive design, accessibility, and user experience. Each project taught me something new."
-    },
-    {
-      year: "2021",
-      title: "The Beginning",
-      subtitle: "Self-Taught Journey",
-      icon: FaGraduationCap,
-      description: "Started my coding journey with HTML, CSS, and JavaScript. Spent countless hours learning through online resources, YouTube tutorials, and documentation. Fell in love with the power of creating with code."
-    },
-  ];
+export default function About({ id }) {
+  const portraitPath = "C:/Users/USER/.gemini/antigravity/brain/3c43f1bd-13ef-42a0-acfb-ebe526f6900d/about_me_abstract_portrait_1770290605309.png";
 
   return (
-    <section
-      id={id}
-      className={`${className} min-h-screen py-20 text-black px-6 md:px-10`}
-    >
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Header */}
-        <motion.div
-          className="mb-14"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-5xl md:text-5xl font-medium mb-3">About</h2>
-          <div className="w-16 h-1 bg-black"></div>
-        </motion.div>
+    <section id={id} className="py-32 relative overflow-hidden min-h-screen flex items-center">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div className="absolute top-[10%] left-[5%] w-72 h-72 bg-accent-blue/5 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[10%] right-[5%] w-96 h-96 bg-accent-indigo/5 blur-[120px] rounded-full animate-pulse delay-1000" />
+      </div>
 
-        {/* Improved Intro Section */}
-        <motion.div
-          className="mb-20 grid md:grid-cols-2 gap-8 items-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <div>
-            <h3 className="text-2xl md:text-2xl font-semibold text-black mb-4">
-              Crafting Digital Excellence
-            </h3>
-            <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
-              Hi, I'm <span className="font-semibold text-black">Tartor Gaadi</span>, a full-stack developer passionate about building innovative web solutions that make a difference.
-            </p>
-            <p className="text-base text-gray-600 leading-relaxed">
-              Based in Port Harcourt, Nigeria, I transform complex problems into elegant, user-centric applications. From concept to deployment, I ensure every detail contributes to an outstanding experience.
-            </p>
-          </div>
-          <div className="bg-black/5 border border-black/10 rounded-2xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <FaLightbulb className="w-6 h-6 text-gray-600" />
-              <h4 className="text-xl font-semibold">My Approach</h4>
-            </div>
-            <ul className="space-y-2 text-gray-700 text-base">
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                Clean, scalable code
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                User-focused design
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                Continuous innovation
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                Problem-solving mindset
-              </li>
-            </ul>
-          </div>
-        </motion.div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
-        {/* Timeline Section */}
-        <div className="relative mb-20" ref={timelineRef}>
-          {/* Background Line */}
-          <div className="absolute left-0 md:left-8 top-0 bottom-0 w-0.5 bg-black/10"></div>
-          
-          {/* Animated Line */}
-          <div 
-            ref={lineRef}
-            className="absolute left-0 md:left-8 top-0 w-0.5 bg-black"
-            style={{ height: '0px' }}
-          ></div>
-
-          {timeline.map((item, idx) => (
+          {/* Creative Imagery Column */}
+          <div className="lg:col-span-5 order-2 lg:order-1">
             <motion.div
-              key={idx}
-              className="relative mb-16 md:mb-20 pl-12 md:pl-24"
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="relative aspect-square"
+            >
+              {/* Main Image Container */}
+              <div className="absolute inset-0 z-10 border border-border-strong rounded-[3rem] overflow-hidden group shadow-2xl">
+                <img
+                  src={portraitPath}
+                  alt="Visionary Developer Abstract Portrait"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent opacity-60" />
+              </div>
+
+              {/* Decorative Glass Elements */}
+              <div className="absolute -top-6 -right-6 w-32 h-32 bento-card border-border-strong z-20 flex items-center justify-center animate-float">
+                <FaLightbulb className="text-4xl text-accent-blue" />
+              </div>
+
+              {/* Animated Rings */}
+              <div className="absolute inset-[-20px] border border-accent-blue/10 rounded-[4rem] animate-[spin_20s_linear_infinite]" />
+              <div className="absolute inset-[-40px] border border-accent-indigo/5 rounded-[5rem] animate-[spin_30s_linear_infinite_reverse]" />
+            </motion.div>
+          </div>
+
+          {/* Storytelling Content Column */}
+          <div className="lg:col-span-7 order-1 lg:order-2">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: idx * 0.2 }}
+              transition={{ duration: 0.8 }}
             >
-              {/* Timeline Dot */}
-              <div className="absolute left-0 md:left-8 top-2 w-4 h-4 -ml-[7px] rounded-full bg-black border-4 border-white shadow-lg"></div>
+              <span className="text-accent-blue font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Manifesto</span>
+              <h2 className="text-5xl md:text-7xl font-clash font-bold tracking-wider mb-8 leading-tight">
+                Architecting <br />
+                <span className="text-accent-blue">Digital Evolution.</span>
+              </h2>
 
-              {/* Content */}
-              <div className="bg-white/50 border border-black/10 rounded-2xl p-6 md:p-8 hover:border-black/30 transition-all">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-black/5 rounded-xl">
-                    <item.icon className="w-6 h-6 text-gray-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500 font-medium mb-1">{item.year}</p>
-                    <h3 className="text-2xl font-semibold text-black mb-1">{item.title}</h3>
-                    <p className="text-base text-gray-600 font-medium">{item.subtitle}</p>
-                  </div>
+              <div className="space-y-6 text-xl text-text-dim leading-relaxed max-w-2xl">
+                <p>
+                  I'm <span className="text-text-main font-bold">Tartor Gaadi</span>, a full-stack architect based in the heart of Port Harcourt. I don't just write code; I weave digital tapestries that bridge the gap between human intuition and machine precision.
+                </p>
+                <p>
+                  My journey is fueled by a relentless pursuit of excellence. From scalable cloud infrastructures to interactive experiences, I build solutions that inspire.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8 mt-12">
+                <div>
+                  <h4 className="text-text-main font-bold text-2xl mb-2 font-clash">Vision</h4>
+                  <p className="text-text-dim text-sm">Empowering humans through seamless tech integration.</p>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{item.description}</p>
+                <div>
+                  <h4 className="text-text-main font-bold text-2xl mb-2 font-clash">Mission</h4>
+                  <p className="text-text-dim text-sm">Transforming complex chaos into elegant digital order.</p>
+                </div>
+              </div>
+
+              <div className="mt-12 flex items-center gap-6">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-12 h-12 rounded-full border-2 border-white bg-white shadow-sm flex items-center justify-center text-xs font-bold text-accent-blue">
+                      {i}+
+                    </div>
+                  ))}
+                </div>
+                <div className="text-sm text-text-dim font-medium">
+                  Years of crafting <br />
+                  <span className="text-text-main font-bold uppercase tracking-widest text-[10px]">Premium Digital Assets</span>
+                </div>
               </div>
             </motion.div>
-          ))}
+          </div>
+
         </div>
-
-        {/* Philosophy Section */}
-        <motion.div
-          className="mb-20 bg-black/5 border border-black/10 rounded-2xl p-8 md:p-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <FaLightbulb className="w-8 h-8 text-gray-600" />
-            <h3 className="text-2xl md:text-3xl font-semibold">My Philosophy</h3>
-          </div>
-          <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-4">
-            I believe in writing clean, maintainable code that scales. Each project is an opportunity 
-            to push boundaries and create something meaningful. I'm constantly learning, adapting, 
-            and refining my craft.
-          </p>
-          <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-            Beyond just functionality, I focus on creating digital experiences that feel intuitive 
-            and delightful. The details matter—from smooth animations to thoughtful interactions.
-          </p>
-        </motion.div>
-
-        {/* Contact Section */}
-        <motion.div
-          className="space-y-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <h3 className="text-2xl font-semibold mb-8 flex items-center gap-2">
-            <FaMapMarkerAlt className="text-gray-600" />
-            Get in Touch
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Email Card */}
-            <motion.div
-              className="p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all bg-white/50"
-              whileHover={{ y: -3 }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-full bg-black/5">
-                  <FaEnvelope className="text-gray-600 w-5 h-5" />
-                </div>
-                <span className="text-base font-medium text-gray-700">Email</span>
-              </div>
-              <p className="text-sm text-gray-500 font-normal mb-4">
-                Let's discuss your next project
-              </p>
-              <button
-                onClick={handleCopyEmail}
-                className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  copied
-                    ? "bg-green-500 text-white"
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-              >
-                {copied ? "✓ Email Copied!" : "Copy Email"}
-              </button>
-            </motion.div>
-
-            {/* WhatsApp Card */}
-            <motion.div
-              className="p-6 border border-black/10 rounded-2xl hover:border-black/30 transition-all bg-white/50"
-              whileHover={{ y: -3 }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-full bg-black/5">
-                  <FaWhatsapp className="text-gray-600 w-5 h-5" />
-                </div>
-                <span className="text-base font-medium text-gray-700">WhatsApp</span>
-              </div>
-              <p className="text-sm text-gray-500 font-normal mb-4">
-                Quick chat? Message me directly
-              </p>
-              <button
-                onClick={handleCopyWhatsapp}
-                className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  copiedWhatsapp
-                    ? "bg-green-500 text-white"
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-              >
-                {copiedWhatsapp ? "✓ Number Copied!" : "Copy Number"}
-              </button>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Location Badge */}
-        <motion.div
-          className="mt-12 inline-flex items-center gap-2 bg-black/5 border border-black/10 px-5 py-3 rounded-full"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <FaMapMarkerAlt className="text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">Port Harcourt, Nigeria</span>
-        </motion.div>
       </div>
     </section>
   );
